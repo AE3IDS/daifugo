@@ -34,7 +34,9 @@ public class UserTable : MonoBehaviour {
 	private void addCards(){
 		
 		GameObject card = Instantiate (cardBack,Vector3.zero, gameObject.transform.rotation) as GameObject;
-		card.transform.parent = gameObject.transform;
+		card.transform.SetParent (gameObject.transform, false);
+		card.GetComponent<Animator> ().SetBool ("showCard", true);
+
 
 		RectTransform m = card.GetComponent<RectTransform> ();
 		m.anchoredPosition = new Vector2 (cardX, CARD_Y);
