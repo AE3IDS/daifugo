@@ -11,7 +11,9 @@
 .Spotlight-V100
 *.png
 *.jpg
-*.meta
+*.png.meta
+*.jpg.meta
+*.psd.meta
 *.psd
 *.ttf
 *.otf
