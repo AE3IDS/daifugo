@@ -4,7 +4,7 @@ Status: in progress
 Mobile version of the Daifugo game built with Unity.
 
 ## UI Prototype
-![alt text](https://dl.dropbox.com/s/l08hpowt0ka4ia1/IMG_0246.jpg?dl=0)
+![alt text](https://dl.dropbox.com/s/t6710ckmmyt187e/IMG_0246.jpg?dl=0)
 
 Select Game Rules and Avatar Screen
 
