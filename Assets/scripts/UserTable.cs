@@ -12,6 +12,10 @@ public class UserTable : MonoBehaviour {
 	private const float CARD_Y = 21.0f;
 	private float cardX = -146.0f;
 
+	private string _userId;
+	public string userId { get { return this._userId; } set { this._userId = value; } }
+
+
 	private bool _isOccupied;
 
 	void Start () {

@@ -10,17 +10,40 @@ public class Table : MonoBehaviour {
 	public GameObject cards;
 
 	public GameObject f;
+	private bool test =false;
 
 	// Use this for initialization
-	void Start () {
+
+	IEnumerator test1(){
+		
+		SocketConnection h = new SocketConnection ();
+		h.setDelegate (this);
+		h.greet ();
 	
-
-
+		while (!test) {
+			yield return null;
+		}
+			
+		f.GetComponent<Animator> ().SetBool ("distribute", true);
 
 	}
 
+	void Awake(){
+
+	}
+
+
+
+	void Start () {
+
+
+
+		StartCoroutine ("test1");
+	}
+
 	public void distribute(){
-		f.GetComponent<Animator> ().SetBool ("distribute", true);
+		Debug.Log ("asdfs");
+		test = true;
 	}
 
 	public void showCardUser(){
@@ -46,7 +69,15 @@ public class Table : MonoBehaviour {
 		overlay.GetComponent<OverlayScript> ().toggleCards ();
 	}
 
+	/*
+	 * 
+	 * Start Distribute the Cards
+	 * 
+	 */
 
+	public void distribute1(){
+
+	}
 
 		
 	/*

@@ -24,7 +24,6 @@ public class Settings : MonoBehaviour,SocketConnectionInterface {
 	private const int AvatarContainerIndex = 1;
 
 	void Start () {
-
 		// init private variables
 
 		hasRuleData = false;
