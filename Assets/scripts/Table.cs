@@ -92,9 +92,9 @@ public class Table : MonoBehaviour {
 		GameObject emptySpace = null;
 		UserTable t = null;
 
-		for(;childCount > 0;childCount--){
+		for(int i =0 ; i < childCount;i--){
 
-			GameObject childObject = gameObject.transform.GetChild (childCount).gameObject;
+			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
 
 			if (childObject.tag == tablePlayerTag) {
 				
