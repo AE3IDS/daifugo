@@ -62,8 +62,6 @@ public class CardSpawner{
 
 	private Dictionary<string,string> getDictionaryForKey(int key){
 
-		Debug.Log (key.ToString ());
-
 		if (key == 0) {
 			return _heartSuit;
 		} else if (key == 1) {
