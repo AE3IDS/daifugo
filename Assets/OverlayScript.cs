@@ -12,15 +12,12 @@ public class OverlayScript : MonoBehaviour {
 	private bool _showLoading = false;
 	private bool _showWaiting = false;
 	private bool _showCards = false;
+	private bool _show = false;
 
-	public void showPause(){
-		pause.SetActive (true);
-		pause.GetComponent<Animator> ().SetBool ("showPause", true);
-	}
 
-	public void showInfo(){
-		info.SetActive (true);
-		info.GetComponent<Animator> ().SetBool ("showPause", true);
+	public void toggle(){
+		gameObject.SetActive (!_show);
+		_show = !_show;
 	}
 
 	public void toggleCards(){
