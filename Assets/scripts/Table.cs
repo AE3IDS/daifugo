@@ -25,11 +25,12 @@ public class Table : MonoBehaviour {
 
 	void Start () {
 
+		addUser("asdfs",1);
+		addUser ("asdfs", 5);
 	}
 
 	public void distribute(){
-		Debug.Log ("asdfs");
-		test = true;
+		f.GetComponent<Animator> ().SetBool ("distribute", true);
 	}
 
 	public void showCardUser(){
@@ -86,13 +87,13 @@ public class Table : MonoBehaviour {
 	 * 
 	 */ 
 
-	public void addUser(){
+	public void addUser(string userid, int photoId){
 
 		int childCount = gameObject.transform.childCount;
 		GameObject emptySpace = null;
 		UserTable t = null;
 
-		for(int i =0 ; i < childCount;i--){
+		for(int i =0 ; i < childCount;i++){
 
 			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
 
@@ -100,7 +101,7 @@ public class Table : MonoBehaviour {
 				
 				t = childObject.GetComponent<UserTable> ();
 
-				if (!t.getIsOccupied ()) { 
+				if (!t.spaceOccupied) { 
 					emptySpace = childObject;
 					break;
 				}
@@ -108,7 +109,9 @@ public class Table : MonoBehaviour {
 			}
 		}
 
-		t.addPhoto (0);
+		t.userId = userid;
+		t.addPhoto (photoId);
+		t.spaceOccupied = true;
 	}
 
 	// Update is called once per frame
