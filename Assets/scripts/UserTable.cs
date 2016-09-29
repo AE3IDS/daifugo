@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class UserTable : MonoBehaviour {
 
@@ -17,6 +18,7 @@ public class UserTable : MonoBehaviour {
 
 
 	private bool _isOccupied;
+	public bool spaceOccupied { get { return this._isOccupied; } set {this._isOccupied = value; }}
 
 	void Start () {
 		_isOccupied = false;
@@ -26,12 +28,44 @@ public class UserTable : MonoBehaviour {
 	
 	}
 
-	public bool getIsOccupied(){
-		return this._isOccupied;
-	}
-
-
 	public void addPhoto(int photoId){
+
+		string imageName = null;
+
+		if (photoId == 0) {
+			
+			imageName = "dino";
+
+		} else if (photoId == 1) {
+
+			imageName = "minion";
+
+		} else if (photoId == 2) {
+
+			imageName = "dory";
+
+		} else if (photoId == 3) {
+
+			imageName = "monster";
+
+		} else if (photoId == 4) {
+
+			imageName = "anger";
+
+		} else if (photoId == 5) {
+
+			imageName = "baymax";
+
+		} else if (photoId == 6) {
+
+			imageName = "dory";
+
+		}
+			
+		Texture2D avaTex = Resources.Load ("images/avatar/"+imageName, typeof(Texture2D)) as Texture2D;
+
+		avatar.GetComponent<Image> ().sprite = Sprite.Create (avaTex, new Rect (0, 0, avaTex.width, avaTex.height), new Vector2 (0.0f, 0.0f));
+
 
 	}
 
