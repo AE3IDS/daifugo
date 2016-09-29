@@ -7,6 +7,7 @@ public class Table : MonoBehaviour {
 	private const string tablePlayerTag = "tablePlayer";
 	public GameObject overlay;
 	public GameObject userActions;
+	public GameObject user;
 	public GameObject cards;
 
 	public GameObject f;
@@ -14,19 +15,7 @@ public class Table : MonoBehaviour {
 
 	// Use this for initialization
 
-	IEnumerator test1(){
-		
-		SocketConnection h = new SocketConnection ();
-		h.setDelegate (this);
-		h.greet ();
-	
-		while (!test) {
-			yield return null;
-		}
-			
-		f.GetComponent<Animator> ().SetBool ("distribute", true);
 
-	}
 
 	void Awake(){
 
@@ -36,9 +25,6 @@ public class Table : MonoBehaviour {
 
 	void Start () {
 
-
-
-		StartCoroutine ("test1");
 	}
 
 	public void distribute(){
@@ -68,6 +54,20 @@ public class Table : MonoBehaviour {
 		overlay.SetActive (true);
 		overlay.GetComponent<OverlayScript> ().toggleCards ();
 	}
+
+	/*
+	 * 
+	 * add user Id to owner
+	 * 
+	 */
+
+	public void addOwnerId(string id){
+
+		user.GetComponent<UserTable> ().userId = id;
+
+	}
+
+
 
 	/*
 	 * 
@@ -109,13 +109,10 @@ public class Table : MonoBehaviour {
 		}
 
 		t.addPhoto (0);
-
-
-
-		
 	}
 
 	// Update is called once per frame
+
 	void Update () {
 	
 	}
