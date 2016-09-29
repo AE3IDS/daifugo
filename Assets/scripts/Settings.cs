@@ -1,48 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using WebSocketSharp;
-using WebSocketSharp.Server;
 using UnityEngine.SceneManagement;
 
-public class Settings : MonoBehaviour,SocketConnectionInterface {
+public class Settings : MonoBehaviour {
 
 	public Button ruleButton;
+	public Button roomlistButton;
 	public Button avatarButton;
 
-	private Button activeButton = null;
+	public GameObject avatarContainer;
 	public GameObject listContainer;
-	public GameObject spinner;
-	private bool hasRuleData;
-	private bool hasAvatarData;
+
+
+	private Button activeButton;
+
+
 
 	// ColorBlocks of the ruleButton and avatarButton
+
 	private ColorBlock selectedColorBlock;
 	private ColorBlock unselectedColorBlock;
 
-	private const int RuleContainerIndex = 0;
-	private const int AvatarContainerIndex = 1;
-
 	void Start () {
-		// init private variables
 
-		hasRuleData = false;
-		hasAvatarData = false;
+
+		string mode = PlayerPrefs.GetString ("mode");
+
+		if (mode == "single") {
+			
+			roomlistButton.interactable = false;
+
+		} else if (mode == "multi") {
+			
+			ruleButton.interactable = false;
+
+		}
 
 		selectedColorBlock = ruleButton.colors;
 		unselectedColorBlock = avatarButton.colors;
 
-		// Register onclick event handler for the ruleButton & avatarButton
+		activeButton = ruleButton;
 
-		ruleButton.onClick.AddListener (delegate {
-			changeActive(ruleButton);
-		});
-
-		avatarButton.onClick.AddListener (delegate {
-			changeActive (avatarButton);
-		});
-
-		changeActive (ruleButton);
 	}
 
 
@@ -51,56 +50,46 @@ public class Settings : MonoBehaviour,SocketConnectionInterface {
 
 	// Hide and show containers
 
-	private void hideandshow(int hide,int show){
+	private void hideandshow(int btIndex){
 
-		listContainer.transform.GetChild (hide).gameObject.SetActive (false);
-		listContainer.transform.GetChild (show).gameObject.SetActive (true);
+		int childCount = listContainer.transform.childCount;
 
-	}
+		for (int i = 0; i < childCount; i++) {
+			listContainer.transform.GetChild (i).gameObject.SetActive (i != btIndex?false:true);
+		}
 
-	public void receiveAvatars(string[] s){
 
 	}
 
 	public void startGame(){
+		
+		int b = avatarContainer.GetComponent<avatars> ().selectedButton;
+
+		PlayerPrefs.SetInt("avatar",b);
+
+
 		SceneManager.LoadScene ("game");
+
+	
 	}
 
 	// Onclick handler for ruleButton & avatarButton
 
-	private void changeActive(Button bt){
+	public void changeActive(GameObject g){
 
-		if (activeButton == null) {
+		Button bt = g.GetComponent<Button> ();
 
-			// Load data from server
-//			spinner.SetActive(true);
+		if (activeButton.name != bt.name) {
 
+			int btIndex = g.transform.GetSiblingIndex ();
+
+			hideandshow (btIndex);
+
+			bt.colors = selectedColorBlock;
+			activeButton.colors = unselectedColorBlock;
 			activeButton = bt;
-		} else {
-			
-			if (activeButton.name != bt.name) {
-				bt.colors = selectedColorBlock;
-
-				if (bt.name == "ruleButton") {
-					hideandshow (AvatarContainerIndex, RuleContainerIndex);
-				} else {
-					hideandshow (RuleContainerIndex, AvatarContainerIndex);
-				}
-
-				activeButton.colors = unselectedColorBlock;
-				activeButton = bt;
-			}
 
 		}
 
-
-
-
 	}
-	
-
-	void Update () {
-	
-	}
-
 }

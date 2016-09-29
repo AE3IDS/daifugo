@@ -14,8 +14,12 @@ public class MainMenuScript : MonoBehaviour {
 	
 	}
 
-	public void singlePlayer(){
+	public void singlePlayer(int btIndex){
+
+		string type = btIndex == 0 ? "single" : "multi";
+		PlayerPrefs.SetString ("mode", type);
 		SceneManager.LoadScene ("main");
+
 	}
 
 }
