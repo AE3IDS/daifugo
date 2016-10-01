@@ -14,7 +14,7 @@ public class Room : MonoBehaviour {
 	}
 
 	void setroomseq(string seq){
-		this.roomSeq.GetComponent<Text> ().text = this.roomSeq.GetComponent<Text> ().text + " " + seq;
+		this.roomSeq.GetComponent<Text> ().text = this.roomSeq.GetComponent<Text> ().text + seq;
 	}
 
 	void setnumofplayer(string num){
