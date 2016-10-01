@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using WebSocketSharp;
+using Newtonsoft.Json;
 
 public class SocketConnection{
 
@@ -67,15 +70,29 @@ public class SocketConnection{
 
 	public void getRoom(){
 
+	}
 
+	public string writeRequest(int code){
+
+		StringBuilder sb = new StringBuilder ();
+		StringWriter sw = new StringWriter (sb);
+
+		JsonWriter writer = new JsonTextWriter (sw);
+
+		writer.Formatting = Formatting.Indented;
+		writer.WriteStartObject ();
+		writer.WritePropertyName ("request");
+		writer.WriteStartObject ();
+		writer.WritePropertyName ("code");
+		writer.WriteValue (code.ToString ());
+		writer.WriteEndObject ();
+		writer.WriteEndObject ();
+
+		return sb.ToString ();
 	}
 
 
-
-
-
-
-//
+		
 	public void setDelegate(object i){
 		this._delegator = i;
 	}
