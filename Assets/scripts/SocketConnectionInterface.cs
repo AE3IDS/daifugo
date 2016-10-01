@@ -1,7 +1,7 @@
 ﻿
 public interface SocketConnectionInterface{
 
-	void receiveAvatars(string[] s);
+	void receiveData(string dt);
 
 
 }
