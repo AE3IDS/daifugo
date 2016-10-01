@@ -18,7 +18,7 @@ public class SocketConnection{
 	 * 
 	 */
 
-	private object _delegator;
+	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
 
 	private void startSocket(string data){
@@ -43,8 +43,7 @@ public class SocketConnection{
 			Debug.Log("receive message");
 
 			if(e.IsText){
-				Debug.Log(e.Data);
-				((Game)this._delegator).receiveData(e.Data);
+				(this._delegator).receiveData(e.Data);
 			}
 
 		};
@@ -63,13 +62,14 @@ public class SocketConnection{
 
 	public void greet(){
 
-
+		startSocket (writeRequest (101));
 
 	}
 
 
 	public void getRoom(){
-
+		
+		startSocket (writeRequest (104));
 	}
 
 	public string writeRequest(int code){
@@ -88,12 +88,14 @@ public class SocketConnection{
 		writer.WriteEndObject ();
 		writer.WriteEndObject ();
 
+
+
 		return sb.ToString ();
 	}
 
 
 		
-	public void setDelegate(object i){
+	public void setDelegate(SocketConnectionInterface i){
 		this._delegator = i;
 	}
 
