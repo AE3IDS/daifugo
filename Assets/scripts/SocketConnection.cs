@@ -87,6 +87,11 @@ public class SocketConnection{
 
 	#region JSONTYPE_MESSAGE
 
+	public void sendLobbyDetails(string[] dt){
+
+		requestPool.Add (JSONMaker.makeJSON (JSONTYPE_MESSAGE, 106,dt));
+	}
+
 	#endregion
 
 	#region JSONTYPE_REQUEST
