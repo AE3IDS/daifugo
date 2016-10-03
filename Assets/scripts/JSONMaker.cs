@@ -6,7 +6,7 @@ using System.IO;
 
 public static class JSONMaker {
 
-	public static string makeJSON(string type, int code, bool hasData, string[] data){
+	public static string makeJSON(string type, int code, string[] data=null){
 
 		StringBuilder sb = new StringBuilder ();
 		StringWriter sw = new StringWriter (sb);
@@ -22,7 +22,7 @@ public static class JSONMaker {
 
 		// Add the data property if hasData is true.
 
-		if (hasData) {
+		if (data == null) {
 			writer.WritePropertyName ("data");
 			writer.WriteStartArray ();
 
