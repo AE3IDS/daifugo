@@ -16,13 +16,19 @@ public class SocketConnection{
 	 * Code 103: move
 	 * Code 104: room list
 	 * Code 105: fetch rule list
+	 * Code 106: selected rule list
 	 * 
 	 * 
 	 */
 
+	private const string JSONTYPE_MESSAGE = "message";
+	private const string JSONTYPE_REQUEST = "request";
+
 	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
 	List<string> requestPool = new List<string> ();
+
+	#region class definition
 
 	public SocketConnection(){
 
@@ -72,22 +78,36 @@ public class SocketConnection{
 			 
 		}
 	}
-		
+	#endregion
 
-	public void greetServer(){
-		requestPool.Add (101);
-	}
-
-
-	public void getRoom(){
-		requestPool.Add (104);
-	}
-		
 	public void setDelegate(SocketConnectionInterface i){
 		this._delegator = i;
 	}
 
 
+	#region JSONTYPE_MESSAGE
+
+	#endregion
+
+	#region JSONTYPE_REQUEST
+
+	public void greetServer(){
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,101));
+	}
 
 
+	public void fetchRules(){
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,105));
+	}
+//
+//
+	public void getRoom(){
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,104));
+	}
+
+
+
+
+
+	#endregion
 }
