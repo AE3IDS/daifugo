@@ -8,18 +8,16 @@ public class Room : MonoBehaviour {
 	public GameObject roomSeq;
 	public GameObject numOfPlayer;
 
+	void Start(){
+		GetComponent<RectTransform>().localScale = new Vector3(1.0f,1.0f,1.0f);
+	}
 
-	void setroomid(string id){
+
+	public void setRoomDetails(string seq, string id, string num){
+
 		this.roomId.GetComponent<Text> ().text = this.roomId.GetComponent<Text> ().text + " " + id;
-	}
-
-	void setroomseq(string seq){
 		this.roomSeq.GetComponent<Text> ().text = this.roomSeq.GetComponent<Text> ().text + seq;
-	}
-
-	void setnumofplayer(string num){
 		this.numOfPlayer.GetComponent<Text> ().text = this.numOfPlayer.GetComponent<Text> ().text + " " + num;
 	}
-
 
 }
