@@ -15,26 +15,20 @@ public class SocketConnection{
 	 * Code 102: new player
 	 * Code 103: move
 	 * Code 104: room list
+	 * Code 105: fetch rule list
+	 * 
 	 * 
 	 */
 
 	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
+	List<int> requestPool = new List<int> ();
 
-	private void startSocket(string data){
+	public SocketConnection(){
 
 		Debug.Log ("start connecting");
 
-		_sock = new WebSocket ("ws://dennyhartanto.com:3000",new string[] { "echo-protocol" });
-
-
-		// OnOpen event handler 
-
-		_sock.OnOpen += (sender,e) => {
-			Debug.Log("connected");
-			_sock.SendAsync(data,null);
-		};
-
+		_sock = new WebSocket ("ws://192.168.2.1:3000",new string[] { "echo-protocol" });
 
 		//OnMessage event handler
 
@@ -43,6 +37,7 @@ public class SocketConnection{
 			Debug.Log("receive message");
 
 			if(e.IsText){
+				Debug.Log(e.Data);
 				(this._delegator).receiveData(e.Data);
 			}
 
@@ -58,18 +53,33 @@ public class SocketConnection{
 		_sock.ConnectAsync ();
 
 	}
+		
 
 
-	public void greet(){
+	IEnumerator sendData(){
 
-		startSocket (writeRequest (101));
+		while (true) {
+			
+			if ((_sock == null) ||  (!_sock.IsAlive || requestPool.Count == 0)) {
+					yield return null;
+			}
 
+			foreach (int value in requestPool) {
+				_sock.SendAsync (writeRequest (value), null);
+			}
+
+			requestPool.Clear ();
+			 
+		}
+	}
+		
+	public void greetServer(){
+		requestPool.Add (101);
 	}
 
 
 	public void getRoom(){
-		
-		startSocket (writeRequest (104));
+		requestPool.Add (104);
 	}
 
 	public string writeRequest(int code){
@@ -84,7 +94,7 @@ public class SocketConnection{
 		writer.WritePropertyName ("request");
 		writer.WriteStartObject ();
 		writer.WritePropertyName ("code");
-		writer.WriteValue (code.ToString ());
+		writer.WriteValue (code);
 		writer.WriteEndObject ();
 		writer.WriteEndObject ();
 
