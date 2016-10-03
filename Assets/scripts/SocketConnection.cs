@@ -22,7 +22,7 @@ public class SocketConnection{
 
 	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
-	List<int> requestPool = new List<int> ();
+	List<string> requestPool = new List<string> ();
 
 	public SocketConnection(){
 
@@ -64,8 +64,8 @@ public class SocketConnection{
 					yield return null;
 			}
 
-			foreach (int value in requestPool) {
-				_sock.SendAsync (writeRequest (value), null);
+			foreach (string value in requestPool) {
+				_sock.SendAsync (value, null);
 			}
 
 			requestPool.Clear ();
@@ -73,6 +73,7 @@ public class SocketConnection{
 		}
 	}
 		
+
 	public void greetServer(){
 		requestPool.Add (101);
 	}
@@ -81,29 +82,6 @@ public class SocketConnection{
 	public void getRoom(){
 		requestPool.Add (104);
 	}
-
-	public string writeRequest(int code){
-
-		StringBuilder sb = new StringBuilder ();
-		StringWriter sw = new StringWriter (sb);
-
-		JsonWriter writer = new JsonTextWriter (sw);
-
-		writer.Formatting = Formatting.Indented;
-		writer.WriteStartObject ();
-		writer.WritePropertyName ("request");
-		writer.WriteStartObject ();
-		writer.WritePropertyName ("code");
-		writer.WriteValue (code);
-		writer.WriteEndObject ();
-		writer.WriteEndObject ();
-
-
-
-		return sb.ToString ();
-	}
-
-
 		
 	public void setDelegate(SocketConnectionInterface i){
 		this._delegator = i;
