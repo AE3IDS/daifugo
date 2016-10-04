@@ -41,11 +41,22 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 		JObject resData = JObject.Parse (response ["data"].ToString ());
 
 
-		// Get the rules list and give it to rulesContainer to render;
 
-		JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
-		_rules.addRules (rules);
+		switch (response["code"].ToObject<int>()) {
 
+			case Constant.SELECTEDRULE_CODE:
+
+				break;
+
+			case Constant.FETCHRULE_CODE:
+			
+				// Get the rules list and give it to rulesContainer to render;
+
+				JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
+				_rules.addRules (rules);
+
+				break;
+		}
 	}
 
 	#endregion
