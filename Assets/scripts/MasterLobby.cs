@@ -8,25 +8,39 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	public Button ruleButton, avatarButton;
 	protected ColorBlock _selectedColor, _unselectedColor;
-	public GameObject avatarContainer, rulesContainer, socket;
+	public GameObject avatarContainer, rulesContainer, socket,spinner;
 
 	private RulesContainer _rules;
 	private SocketConnection _sock;
 	private Button _activeButton;
 	private string _tempId;
+	private bool _hasReceivedRules;
 
+	IEnumerator receiveRules(){
+		
+		while (!_hasReceivedRules) {
+			yield return null;
+		}
+	
+		spinner.SetActive (false);
 
+	}
 
 	void Start () {
-			
+		
 		_sock = socket.GetComponent<SocketConnection> ();
 		_sock.setDelegate (this);
 		_sock.fetchRules ();
 
+		spinner.SetActive (true);
+
+		_hasReceivedRules = false;
 		_rules = rulesContainer.GetComponent<RulesContainer> ();
 		_selectedColor = ruleButton.colors;
 		_unselectedColor = avatarButton.colors;
 		_activeButton = ruleButton;
+
+		StartCoroutine ("receiveRules");
 
 	}
 
@@ -51,7 +65,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 			case Constant.FETCHRULE_CODE:
 			
 				// Get the rules list and give it to rulesContainer to render;
-
+				_hasReceivedRules = true;
 				JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
 				_rules.addRules (rules);
 
