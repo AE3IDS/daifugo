@@ -10,6 +10,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 	protected ColorBlock _selectedColor, _unselectedColor;
 	public GameObject avatarContainer, rulesContainer, socket;
 
+	private RulesContainer _rules;
 	private SocketConnection _sock;
 	private Button _activeButton;
 	private string _tempId;
@@ -22,6 +23,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 		_sock.setDelegate (this);
 		_sock.fetchRules ();
 
+		_rules = rulesContainer.GetComponent<RulesContainer> ();
 		_selectedColor = ruleButton.colors;
 		_unselectedColor = avatarButton.colors;
 		_activeButton = ruleButton;
@@ -42,7 +44,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 		// Get the rules list and give it to rulesContainer to render;
 
 		JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
-		rulesContainer.GetComponent<RulesContainer> ().addRules (rules);
+		_rules.addRules (rules);
 
 	}
 
@@ -65,6 +67,11 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 	// Hide and show containers
 
 	private void hideandshow(int btIndex){
+
+		bool t = btIndex == 0?false:true;
+
+		rulesContainer.SetActive (!t);
+		avatarContainer.SetActive (t);
 
 	}
 
