@@ -6,15 +6,11 @@ using Newtonsoft.Json.Linq;
 
 public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
-	public Button ruleButton;
-	public Button avatarButton;
-
-	public GameObject avatarContainer;
-	public GameObject rulesContainer;
-
-	protected Button _activeButton;
-	protected SocketConnection _sock;
+	public Button ruleButton, avatarButton, _activeButton;
 	protected ColorBlock _selectedColor, _unselectedColor;
+	public GameObject avatarContainer, rulesContainer;
+
+	protected SocketConnection _sock;
 
 	private string _tempId;
 
@@ -32,11 +28,25 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	public void receiveData(string dt){
 
+		// parse the response from server
+
+		JArray resArray = JArray.Parse (dt);
+		JToken response = resArray.First["response"];
+		JObject resData = JObject.Parse (response ["data"].ToString ());
 
 
+		// Get the tempId property from the response json
 
+		_tempId = resData.GetValue ("tempId").ToString ();
+
+
+		// Get the rules list and give it to rulesContainer to render;
+
+		JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
+		rulesContainer.GetComponent<RulesContainer> ().addRules (rules);
 
 	}
+
 
 	// Onclick handler for the start game button
 
