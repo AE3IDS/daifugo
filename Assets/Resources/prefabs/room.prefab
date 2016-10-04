@@ -198,7 +198,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Room #\x03\n"
+  m_Text: "Room #\x03"
 --- !u!114 &114000010891008108
 MonoBehaviour:
   m_ObjectHideFlags: 1
