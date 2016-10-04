@@ -1621,11 +1621,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ruleButton: {fileID: 521785057}
-  listContainer: {fileID: 2034141476}
-  roomlistButton: {fileID: 0}
-  roomlistContainter: {fileID: 2044322629}
-  avatarButton: {fileID: 460892447}
+  avatarButton: {fileID: 0}
   avatarContainer: {fileID: 1232840469}
+  rulesContainer: {fileID: 0}
+  socket: {fileID: 0}
 --- !u!4 &586847874
 Transform:
   m_ObjectHideFlags: 0
