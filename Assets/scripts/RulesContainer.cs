@@ -8,6 +8,12 @@ public class RulesContainer : MonoBehaviour {
 	bool _hasData =false;
 	JArray _rules;
 
+	void Start(){
+
+		StartCoroutine ("addRulesCoroutine");
+
+	}
+
 	IEnumerator addRulesCoroutine(){
 
 		while (true) {
@@ -17,7 +23,6 @@ public class RulesContainer : MonoBehaviour {
 			}
 
 			// Render all the rules to the list
-
 			for (int i = 0; i < _rules.Count; i++) {
 
 				JObject tk = JObject.Parse (_rules.GetItem (i).ToString ());
@@ -36,7 +41,6 @@ public class RulesContainer : MonoBehaviour {
 	public void addRules(JArray rules){
 		_rules = rules;
 		_hasData = true;
-		StartCoroutine ("addRulesCoroutine");
 	}
 		
 }
