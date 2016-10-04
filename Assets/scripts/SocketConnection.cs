@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using WebSocketSharp;
 using Newtonsoft.Json;
 
-public class SocketConnection{
+public class SocketConnection : MonoBehaviour{
 
 
 	/*
@@ -30,7 +30,24 @@ public class SocketConnection{
 
 	#region class definition
 
-	public SocketConnection(){
+	IEnumerator sendData(){
+
+		while (true) {
+
+			while((_sock == null) ||  (!_sock.IsAlive || requestPool.Count == 0)) {
+				yield return null;
+			}
+				
+			foreach (string value in requestPool) {
+				_sock.SendAsync (value, null);
+			}
+
+			requestPool.Clear ();
+
+		}
+	}
+
+	void Start(){
 
 		Debug.Log ("start connecting");
 
@@ -58,26 +75,11 @@ public class SocketConnection{
 
 		_sock.ConnectAsync ();
 
+
+		StartCoroutine ("sendData");
+
 	}
-		
 
-
-	IEnumerator sendData(){
-
-		while (true) {
-			
-			if ((_sock == null) ||  (!_sock.IsAlive || requestPool.Count == 0)) {
-					yield return null;
-			}
-
-			foreach (string value in requestPool) {
-				_sock.SendAsync (value, null);
-			}
-
-			requestPool.Clear ();
-			 
-		}
-	}
 	#endregion
 
 	public void setDelegate(SocketConnectionInterface i){
