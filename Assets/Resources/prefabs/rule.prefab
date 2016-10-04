@@ -39,6 +39,7 @@ GameObject:
   - 222: {fileID: 222000014227205430}
   - 114: {fileID: 114000013756840066}
   - 114: {fileID: 114000011290943350}
+  - 114: {fileID: 114000013936770906}
   m_Layer: 5
   m_Name: rule
   m_TagString: Untagged
@@ -190,11 +191,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.75
-  m_Text: Can be played almost any time, as any value, but cannot beat a 2. When a
-    joker is played by itself, it is assumed to be one higher than the card played
-    before it; for instance, a joker played on top of a single 5 is effectively a
-    6. Jokers played in combination with at least one other card are the same value
-    as the other card(s); a joker and a 7 is equivalent to a pair of 7s.
+  m_Text: 
 --- !u!114 &114000012322823076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -239,7 +236,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114000012483542104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,7 +269,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Jokers are Wild
+  m_Text: '
+
+'
 --- !u!114 &114000013069786322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -327,6 +326,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114000013936770906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010462400238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f354dce9063d4edfb6655d4230d7573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleName: {fileID: 1000013612914862}
+  ruleDescription: {fileID: 1000011267217404}
 --- !u!222 &222000010599006272
 CanvasRenderer:
   m_ObjectHideFlags: 1
