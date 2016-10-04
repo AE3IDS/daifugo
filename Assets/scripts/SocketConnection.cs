@@ -91,7 +91,7 @@ public class SocketConnection : MonoBehaviour{
 
 	public void sendLobbyDetails(string[] dt){
 
-		requestPool.Add (JSONMaker.makeJSON (JSONTYPE_MESSAGE, 106,dt));
+		requestPool.Add (JSONMaker.makeJSON (JSONTYPE_MESSAGE, Constant.SELECTEDRULE_CODE,dt));
 	}
 
 	#endregion
@@ -99,17 +99,17 @@ public class SocketConnection : MonoBehaviour{
 	#region JSONTYPE_REQUEST
 
 	public void greetServer(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,101));
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.GREET_CODE));
 	}
 
 
 	public void fetchRules(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,105));
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.FETCHRULE_CODE));
 	}
 //
 //
 	public void getRoom(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,104));
+		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.ROOMLIST_CODE));
 	}
 
 
