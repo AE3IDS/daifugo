@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -20,6 +21,11 @@ public class RuleItem : MonoBehaviour {
 		ruleName.GetComponent<Text> ().text = name;
 		ruleDescription.GetComponent<Text> ().text = description;
 		_ruleId = id;
+
+	}
+
+	public void setToggleHandler(UnityAction<bool> d){
+		toggle.onValueChanged.AddListener (d);
 
 	}
 
