@@ -22,7 +22,7 @@ public static class JSONMaker {
 
 		// Add the data property if hasData is true.
 
-		if (data == null) {
+		if (data != null) {
 			writer.WritePropertyName ("data");
 			writer.WriteStartArray ();
 
