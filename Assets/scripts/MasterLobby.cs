@@ -9,26 +9,46 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	public Button ruleButton, avatarButton;
 	protected ColorBlock _selectedColor, _unselectedColor;
-	public GameObject avatarContainer, rulesContainer, socket,spinner;
+	public GameObject avatarContainer, rulesContainer, socket,spinner, overlay;
 
 	private RulesContainer _rules;
 	private SocketConnection _sock;
 	private Button _activeButton;
 	private string _tempId;
+
+
 	private bool _hasReceivedRules;
+	private bool _hasReceiveId;
 
 	IEnumerator receiveRules(){
-		
-		while (!_hasReceivedRules) {
-			yield return null;
-		}
-	
-		spinner.SetActive (false);
 
+		while (true) {
+
+			while (!_hasReceivedRules || !_hasReceiveId ) {
+				yield return null;
+			}
+
+
+			// When received rules from server
+
+			spinner.SetActive (!_hasReceivedRules);
+
+
+
+			// When received Id from server
+
+			if(_hasReceiveId){
+
+				SceneManager.LoadScene ("game");
+
+			}
+				
+
+		}
 	}
 
 	void Start () {
-		
+
 		_sock = socket.GetComponent<SocketConnection> ();
 		_sock.setDelegate (this);
 		_sock.fetchRules ();
@@ -36,6 +56,8 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 		spinner.SetActive (true);
 
 		_hasReceivedRules = false;
+		_hasReceiveId = false;
+
 		_rules = rulesContainer.GetComponent<RulesContainer> ();
 		_selectedColor = ruleButton.colors;
 		_unselectedColor = avatarButton.colors;
@@ -49,29 +71,34 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	public void receiveData(string dt){
 
+
 		// parse the response from server
 
 		JArray resArray = JArray.Parse (dt);
 		JToken response = resArray.First["response"];
 		JObject resData = JObject.Parse (response ["data"].ToString ());
 
-
-
 		switch (response["code"].ToObject<int>()) {
 
 			case Constant.SELECTEDRULE_CODE:
-				
+			
+				_tempId = resData.GetValue ("userId").ToString ();
+
+				_hasReceiveId = true;
+
 				break;
 
 			case Constant.FETCHRULE_CODE:
 			
 				// Get the rules list and give it to rulesContainer to render;
+
 				_hasReceivedRules = true;
+
 				JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
 				_rules.addRules (rules);
 
 				break;
-		}
+		}	
 	}
 
 	#endregion
@@ -82,6 +109,11 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 	// Onclick handler for the start game button
 
 	public void startGame(){
+
+		// show overlay
+
+		overlay.SetActive (true);
+
 
 
 		// Send the rules and avatar selected
