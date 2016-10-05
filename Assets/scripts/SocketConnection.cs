@@ -89,8 +89,9 @@ public class SocketConnection : MonoBehaviour{
 
 	#region JSONTYPE_MESSAGE
 
-	public void sendLobbyDetails(string[] dt){
+	public void sendLobbyDetails(Dictionary<string,object> dt){
 
+//		Debug.Log (JSONMaker.makeJSON (JSONTYPE_MESSAGE, Constant.SELECTEDRULE_CODE, dt));
 		requestPool.Add (JSONMaker.makeJSON (JSONTYPE_MESSAGE, Constant.SELECTEDRULE_CODE,dt));
 	}
 
