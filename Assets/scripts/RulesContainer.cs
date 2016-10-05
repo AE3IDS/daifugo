@@ -50,10 +50,20 @@ public class RulesContainer : MonoBehaviour {
 
 	}
 
+	#region public methods
+
+	public string[] getRules(){
+
+		return selectedRules.ToArray ();
+	}
+
 	public void addRules(JArray rules){
 		_rules = rules;
 		_hasData = true;
 	}
+
+	#endregion
+
 
 	#region toggle change handler
 
@@ -70,5 +80,7 @@ public class RulesContainer : MonoBehaviour {
 	}
 
 	#endregion
+
+
 		
 }
