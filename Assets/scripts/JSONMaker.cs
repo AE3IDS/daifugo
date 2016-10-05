@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Text;
 using System.IO;
 
 public static class JSONMaker {
 
-	public static string makeJSON(string type, int code, string[] data=null){
+	public static string makeJSON(string type, int code, Dictionary<string,object> data = null){
 
 		StringBuilder sb = new StringBuilder ();
 		StringWriter sw = new StringWriter (sb);
@@ -24,13 +25,14 @@ public static class JSONMaker {
 
 		if (data != null) {
 			writer.WritePropertyName ("data");
-			writer.WriteStartArray ();
+			writer.WriteStartObject ();
 
-			foreach (string d in data) {
-				writer.WriteValue (d);
+			foreach (KeyValuePair<string, object> d in data) {
+				writer.WritePropertyName (d.Key);
+				writer.WriteValue (d.Value);
 			}
 
-			writer.WriteEndArray ();
+			writer.WriteEndObject ();
 		}
 			
 		writer.WriteEndObject ();
