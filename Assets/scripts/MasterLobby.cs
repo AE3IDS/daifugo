@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json.Linq;
 
@@ -59,7 +60,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 		switch (response["code"].ToObject<int>()) {
 
 			case Constant.SELECTEDRULE_CODE:
-
+				
 				break;
 
 			case Constant.FETCHRULE_CODE:
@@ -81,12 +82,15 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 	// Onclick handler for the start game button
 
 	public void startGame(){
-		
-		int b = avatarContainer.GetComponent<avatars> ().selectedButton;
 
 
-		SceneManager.LoadScene ("game");
-	
+		// Send the rules and avatar selected
+
+		int avatarIndex = avatarContainer.GetComponent<avatars> ().selectedButton;
+
+		string m = "[" + string.Join (", ", _rules.getRules()) + "]" ;
+
+		_sock.sendLobbyDetails (new Dictionary<string,object> { {"rules",m},{"avatar",avatarIndex}});
 	}
 
 	// Hide and show containers
