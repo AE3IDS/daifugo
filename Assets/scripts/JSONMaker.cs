@@ -7,7 +7,7 @@ using System.IO;
 
 public static class JSONMaker {
 
-	public static string makeJSON(string type, int code, Dictionary<string,object> data = null){
+	public static string makeJSON(int code, Dictionary<string,object> data = null){
 
 		StringBuilder sb = new StringBuilder ();
 		StringWriter sw = new StringWriter (sb);
@@ -15,8 +15,6 @@ public static class JSONMaker {
 		JsonWriter writer = new JsonTextWriter (sw);
 
 		writer.Formatting = Formatting.Indented;
-		writer.WriteStartObject ();
-		writer.WritePropertyName (type);
 		writer.WriteStartObject ();
 		writer.WritePropertyName ("code");
 		writer.WriteValue (code);
@@ -35,7 +33,6 @@ public static class JSONMaker {
 			writer.WriteEndObject ();
 		}
 			
-		writer.WriteEndObject ();
 		writer.WriteEndObject ();
 
 
