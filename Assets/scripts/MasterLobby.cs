@@ -49,6 +49,8 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	void Start () {
 
+		DontDestroyOnLoad (socket);
+
 		_sock = socket.GetComponent<SocketConnection> ();
 		_sock.setDelegate (this);
 		_sock.fetchRules ();
