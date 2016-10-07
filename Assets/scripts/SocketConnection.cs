@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using WebSocketSharp;
+using Newtonsoft.Json;
 
-public class SocketConnection{
+public class SocketConnection : MonoBehaviour{
 
 
 	/*
@@ -11,33 +14,56 @@ public class SocketConnection{
 	 * Code 101: greet server
 	 * Code 102: new player
 	 * Code 103: move
-	 * Code 104: 
+	 * Code 104: room list
+	 * Code 105: fetch rule list
+	 * Code 106: selected rule list
+	 * 
 	 * 
 	 */
 
-	private object _delegator;
+	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
-//
-	public void greet(){
+	List<string> requestPool = new List<string> ();
+
+	#region class definition
+
+	IEnumerator sendData(){
+
+		while (true) {
+
+			while((_sock == null) ||  (!_sock.IsAlive || requestPool.Count == 0)) {
+				yield return null;
+			}
+				
+			foreach (string value in requestPool) {
+				_sock.SendAsync (value, null);
+			}
+
+			requestPool.Clear ();
+
+		}
+	}
+
+	void Start(){
 
 		Debug.Log ("start connecting");
-		string[] args = new string[] { "echo-protocol" };
 
-		_sock = new WebSocket ("ws://dennyhartanto.com:3000",args);
-		_sock.OnOpen += (sender,e) => {
-			Debug.Log("connected");
-		};
+		_sock = new WebSocket ("ws://192.168.2.1:3000",new string[] { "echo-protocol" });
+
+		//OnMessage event handler
 
 		_sock.OnMessage += (sender, e) => {
-			
+
 			Debug.Log("receive message");
+
 			if(e.IsText){
 				Debug.Log(e.Data);
-				((Game)this._delegator).receiveData(e.Data);
+				(this._delegator).receiveData(e.Data);
 			}
 
 		};
 
+		// OnError event handler
 
 		_sock.OnError += (sender, e) => {
 			Debug.Log("error occured");
@@ -45,13 +71,37 @@ public class SocketConnection{
 		};
 
 		_sock.ConnectAsync ();
+
+
+		StartCoroutine ("sendData");
+
 	}
-//
-	public void setDelegate(object i){
+
+	#endregion
+
+	public void setDelegate(SocketConnectionInterface i){
 		this._delegator = i;
 	}
 
 
 
 
+	public void sendLobbyDetails(Dictionary<string,object> dt){
+
+		Debug.Log (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE, dt));
+		requestPool.Add (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE,dt));
+	}
+		
+	public void greetServer(){
+		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE));
+	}
+
+	public void fetchRules(){
+		requestPool.Add (JSONMaker.makeJSON(Constant.FETCHRULE_CODE));
+	}
+
+	public void getRoom(){
+		requestPool.Add (JSONMaker.makeJSON(Constant.ROOMLIST_CODE));
+	}
+		
 }
