@@ -21,9 +21,6 @@ public class SocketConnection : MonoBehaviour{
 	 * 
 	 */
 
-	private const string JSONTYPE_MESSAGE = "message";
-	private const string JSONTYPE_REQUEST = "request";
-
 	private SocketConnectionInterface _delegator;
 	private WebSocket _sock;
 	List<string> requestPool = new List<string> ();
@@ -87,35 +84,24 @@ public class SocketConnection : MonoBehaviour{
 	}
 
 
-	#region JSONTYPE_MESSAGE
+
 
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
-//		Debug.Log (JSONMaker.makeJSON (JSONTYPE_MESSAGE, Constant.SELECTEDRULE_CODE, dt));
-		requestPool.Add (JSONMaker.makeJSON (JSONTYPE_MESSAGE, Constant.SELECTEDRULE_CODE,dt));
+		Debug.Log (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE, dt));
+		requestPool.Add (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE,dt));
 	}
-
-	#endregion
-
-	#region JSONTYPE_REQUEST
-
+		
 	public void greetServer(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.GREET_CODE));
+		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE));
 	}
-
 
 	public void fetchRules(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.FETCHRULE_CODE));
+		requestPool.Add (JSONMaker.makeJSON(Constant.FETCHRULE_CODE));
 	}
-//
-//
+
 	public void getRoom(){
-		requestPool.Add (JSONMaker.makeJSON(JSONTYPE_REQUEST,Constant.ROOMLIST_CODE));
+		requestPool.Add (JSONMaker.makeJSON(Constant.ROOMLIST_CODE));
 	}
-
-
-
-
-
-	#endregion
+		
 }
