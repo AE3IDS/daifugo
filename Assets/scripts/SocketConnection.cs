@@ -88,8 +88,8 @@ public class SocketConnection : MonoBehaviour{
 
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
-		Debug.Log (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE, dt));
-		requestPool.Add (JSONMaker.makeJSON (Constant.SELECTEDRULE_CODE,dt));
+		Debug.Log (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE, dt));
+		requestPool.Add (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE,dt));
 	}
 		
 	public void greetServer(){
