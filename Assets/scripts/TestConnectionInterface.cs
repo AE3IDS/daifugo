@@ -1,8 +1,6 @@
 ﻿
 public interface TestConnectionInterface{
 
-	void successConnect();
-	void failConnect();
-
+	void giveStatus(bool s);
 
 }
