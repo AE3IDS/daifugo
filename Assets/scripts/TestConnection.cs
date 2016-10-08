@@ -2,31 +2,51 @@
 using System.Collections;
 using System.Net.Sockets;
 
-public class TestConnection : MonoBehaviour {
+public class TestConnection {
 
-	// Use this for initialization
-	void Start () {
-	
+	private string _ip;
+	private int _port;
 
+	private TestConnectionInterface _delegate;
 
+	public TestConnection(string url, int port){
+
+		this._ip = url;
+		this._port = port;
+
+	}
+
+	public void setDelegate(TestConnectionInterface i){
+		this._delegate = i;
+	}
+
+	public void startTest(){
+
+		bool success = true;
+		TcpClient testClient = null;
 
 		try{
 
-			TcpClient testClient = new TcpClient ("192.168.2.1",3000);
+			testClient = new TcpClient (this._ip,this._port);
 
 		}
+
 		catch(SocketException e){
-
-			Debug.Log ("error connecting");
+			success = false;
+			this._delegate.giveStatus (false);
 
 		}
 
+		finally{
+			
+			if (success) {
 
+				testClient.Close ();
+				this._delegate.giveStatus (true);
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+			}
+		}
+
+	} // end function
+
 }
