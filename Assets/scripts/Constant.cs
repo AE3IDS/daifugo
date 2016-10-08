@@ -10,4 +10,6 @@ public static class Constant{
 	public const int FETCHRULE_CODE = 105;
 	public const int SELECTEDRULE_CODE = 106;
 
+	public const int GAMEROOM_OCCUPIED = 50;
+
 }
