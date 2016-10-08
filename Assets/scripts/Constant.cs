@@ -8,7 +8,7 @@ public static class Constant{
 	public const int MOVE_CODE = 103;
 	public const int ROOMLIST_CODE = 104;
 	public const int FETCHRULE_CODE = 105;
-	public const int SELECTEDRULE_CODE = 106;
+	public const int LOBBYDETAILS_CODE = 106;
 
 	public const int GAMEROOM_OCCUPIED = 50;
 
