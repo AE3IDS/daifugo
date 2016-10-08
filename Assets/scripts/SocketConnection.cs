@@ -84,16 +84,14 @@ public class SocketConnection : MonoBehaviour{
 	}
 
 
-
-
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
 		Debug.Log (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE, dt));
 		requestPool.Add (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE,dt));
 	}
 		
-	public void greetServer(){
-		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE));
+	public void greetServer(Dictionary<string,object> dt){
+		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE,dt));
 	}
 
 	public void fetchRules(){
