@@ -6,6 +6,7 @@ TagManager:
   tags:
   - numOfCards
   - tablePlayer
+  - socket
   layers:
   - Default
   - TransparentFX
