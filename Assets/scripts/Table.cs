@@ -96,15 +96,12 @@ public class Table : MonoBehaviour {
 		for(int i =0 ; i < childCount;i++){
 
 			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
+			t = childObject.GetComponent<UserTable> ();
 
-			if (childObject.tag == tablePlayerTag) {
+			if (childObject.tag == tablePlayerTag && !t.spaceOccupied) {
 				
-				t = childObject.GetComponent<UserTable> ();
-
-				if (!t.spaceOccupied) { 
-					emptySpace = childObject;
-					break;
-				}
+				emptySpace = childObject;
+				break;
 
 			}
 		}
