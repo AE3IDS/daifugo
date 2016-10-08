@@ -5,76 +5,46 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json.Linq;
 
-public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
+public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectionInterface{
 
-	public Button ruleButton, avatarButton;
-	protected ColorBlock _selectedColor, _unselectedColor;
-	public GameObject avatarContainer, rulesContainer, socket,spinner, overlay;
+	public GameObject socket, spinner, overlay, Content;
+	public string url;
+	public int port;
 
-	private RulesContainer _rules;
+
 	private SocketConnection _sock;
-	private Button _activeButton;
 	private string _tempId;
+	private bool _hasReceivedRules = false;
+	private bool _hasReceiveId = false;
 
+	private int success = -1;
 
-	private bool _hasReceivedRules;
-	private bool _hasReceiveId;
-
-	IEnumerator receiveRules(){
-
-		while (true) {
-
-			while (!_hasReceivedRules || !_hasReceiveId ) {
-				yield return null;
-			}
-
-
-			// When received rules from server
-
-			spinner.SetActive (!_hasReceivedRules);
-
-
-
-			// When received Id from server
-
-			if(_hasReceiveId){
-
-				SceneManager.LoadScene ("game");
-
-			}
-				
-
-		}
-	}
+	private MasterLobbyContent _ct;
 
 	void Start () {
 
 		DontDestroyOnLoad (socket);
+	
+	
+		_ct = Content.GetComponent<MasterLobbyContent> ();
+
+		TestConnection u = new TestConnection (url, port);
+		u.setDelegate (this);
+		u.startTest ();
+
 
 		_sock = socket.GetComponent<SocketConnection> ();
 		_sock.setDelegate (this);
-		_sock.fetchRules ();
 
-		spinner.SetActive (true);
-
-		_hasReceivedRules = false;
-		_hasReceiveId = false;
-
-		_rules = rulesContainer.GetComponent<RulesContainer> ();
-		_selectedColor = ruleButton.colors;
-		_unselectedColor = avatarButton.colors;
-		_activeButton = ruleButton;
 
 		StartCoroutine ("receiveRules");
+		StartCoroutine ("receiveConnectionStatus");
 
 	}
 
-	#region SocketConnectionInterface
+	#region Socket Connection
 
 	public void receiveData(string dt){
-
-
-		// parse the response from server
 
 		JArray resArray = JArray.Parse (dt);
 		JToken response = resArray.First["response"];
@@ -82,10 +52,9 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 		switch (response["code"].ToObject<int>()) {
 
-			case Constant.SELECTEDRULE_CODE:
+			case Constant.LOBBYDETAILS_CODE:
 			
 				_tempId = resData.GetValue ("userId").ToString ();
-
 				_hasReceiveId = true;
 
 				break;
@@ -94,13 +63,66 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 			
 				// Get the rules list and give it to rulesContainer to render;
 
-				_hasReceivedRules = true;
+				// _hasReceivedRules = true;
 
-				JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
-				_rules.addRules (rules);
+				// JArray rules = JArray.Parse ((resData.GetValue ("rules")).ToString ());
+				// _rules.addRules (rules);
 
 				break;
 		}	
+	}
+
+	public void handleError(){
+		Debug.Log ("lobby error");
+	}
+
+	IEnumerator receiveRules(){
+
+		while (true) {
+
+			while (/*!_hasReceivedRules ||*/ !_hasReceiveId ) {
+				yield return null;
+			}
+
+			// When received Id from server
+
+			if(_hasReceiveId){
+				PlayerPrefs.SetString ("user", _tempId);
+				SceneManager.LoadScene ("game");
+
+			}
+
+			break;
+		}
+	}
+
+	#endregion
+
+
+	#region Test Connection
+		
+	public void giveStatus(bool s){
+		success = s ? 1 : 0;
+	}
+
+	IEnumerator receiveConnectionStatus(){
+
+		while (true) {
+
+			while (success == -1) {
+				yield return null;
+			}
+
+			Debug.Log (success);
+
+			if (success == 1) {
+
+			} else if(success == 0){
+				overlay.SetActive (true);
+			}
+
+			break;
+		}
 	}
 
 	#endregion
@@ -108,53 +130,22 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface{
 
 	#region OnClick Handlers
 
-	// Onclick handler for the start game button
-
 	public void startGame(){
-
-		// show overlay
 
 		overlay.SetActive (true);
 
 
+		int avatarIndex = _ct.getAvatarIndex ();
 
-		// Send the rules and avatar selected
+		string m = "[" + string.Join (", ", _ct.getRules ()) + "]";
 
-		int avatarIndex = avatarContainer.GetComponent<avatars> ().selectedButton;
+		Dictionary<string,object> obj = new Dictionary<string,object> { 
+			{ "rules",m },
+			{ "avatar",1 },
+			{ "mode",1 }
+		};
 
-		string m = "[" + string.Join (", ", _rules.getRules()) + "]" ;
-
-		_sock.sendLobbyDetails (new Dictionary<string,object> { {"rules",m},{"avatar",avatarIndex}});
-	}
-
-	// Hide and show containers
-
-	private void hideandshow(int btIndex){
-
-		bool t = btIndex == 0?false:true;
-
-		rulesContainer.SetActive (!t);
-		avatarContainer.SetActive (t);
-
-	}
-
-	// Onclick handler for ruleButton, avatarButton
-
-	public void changeActive(GameObject g){
-
-		Button bt = g.GetComponent<Button> ();
-
-		if (_activeButton.name != bt.name) {
-
-			hideandshow (g.transform.GetSiblingIndex ());
-
-			bt.colors = _selectedColor;
-			_activeButton.colors = _unselectedColor;
-
-			_activeButton = bt;
-
-		}
-
+		_sock.sendLobbyDetails (obj);
 	}
 
 	#endregion
