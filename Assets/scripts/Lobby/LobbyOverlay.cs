@@ -11,7 +11,7 @@ public class LobbyOverlay : MonoBehaviour {
 	}
 
 	public void showErrorWindow(){
-
+		errorWindow.SetActive (true);
 		errorWindow.GetComponent<Animator> ().SetBool ("showPause",true);
 	
 	}
