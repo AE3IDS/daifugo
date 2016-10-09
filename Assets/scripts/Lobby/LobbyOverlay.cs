@@ -3,13 +3,16 @@ using System.Collections;
 
 public class LobbyOverlay : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public GameObject loadingText, errorWindow;
+
+	public void showLoadingText(){
+
+		loadingText.SetActive (true);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	public void showErrorWindow(){
+
+		errorWindow.GetComponent<Animator> ().SetBool ("showPause",true);
 	
 	}
 }
