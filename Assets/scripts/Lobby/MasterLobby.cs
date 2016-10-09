@@ -113,12 +113,13 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 				yield return null;
 			}
 
-			Debug.Log (success);
-
 			if (success == 1) {
 
 			} else if(success == 0){
 				overlay.SetActive (true);
+
+				yield return new WaitForSeconds (3.2f);
+				overlay.GetComponent<LobbyOverlay> ().showErrorWindow ();
 			}
 
 			break;
