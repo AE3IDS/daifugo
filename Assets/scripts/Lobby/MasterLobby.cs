@@ -20,6 +20,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 	private int success = -1;
 
 	private MasterLobbyContent _ct;
+	private TestConnection _conn;
 
 	void Start () {
 
@@ -28,13 +29,13 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 	
 		_ct = Content.GetComponent<MasterLobbyContent> ();
 
-		TestConnection u = new TestConnection (url, port);
-		u.setDelegate (this);
-		u.startTest ();
+		_conn = new TestConnection (url, port);
+		_conn.setDelegate (this);
+		_conn.startTest ();
 
 
-		_sock = socket.GetComponent<SocketConnection> ();
-		_sock.setDelegate (this);
+//		_sock = socket.GetComponent<SocketConnection> ();
+//		_sock.setDelegate (this);
 
 
 		StartCoroutine ("receiveRules");
@@ -147,6 +148,16 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 		};
 
 		_sock.sendLobbyDetails (obj);
+	}
+
+	public void errorWindowContinue(){
+
+		_conn.startTest ();
+
+	}
+
+	public void errorWindowCancel(){
+
 	}
 
 	#endregion
