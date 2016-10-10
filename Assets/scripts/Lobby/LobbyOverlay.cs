@@ -15,4 +15,21 @@ public class LobbyOverlay : MonoBehaviour {
 		errorWindow.GetComponent<Animator> ().SetBool ("showPause",true);
 	
 	}
+
+	public void hideErrorWindow(){
+
+		if (gameObject.activeInHierarchy) {
+			
+			errorWindow.GetComponent<Animator> ().SetBool ("showPause", false);
+			errorWindow.GetComponent<Animator> ().SetBool ("hidePause", true);
+			Invoke ("deactivateWindow", 1.5f);
+
+		}
+	}
+
+	void deactivateWindow(){
+		errorWindow.SetActive (false);
+		gameObject.SetActive (false);
+	}
+
 }
