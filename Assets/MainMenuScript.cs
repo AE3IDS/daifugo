@@ -16,8 +16,7 @@ public class MainMenuScript : MonoBehaviour {
 
 	public void singlePlayer(int btIndex){
 
-		string type = btIndex == 0 ? "single" : "multi";
-		PlayerPrefs.SetString ("mode", type);
+		PlayerPrefs.SetInt ("mode", btIndex+1);
 		SceneManager.LoadScene ("main");
 
 	}
