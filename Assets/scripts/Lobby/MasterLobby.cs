@@ -29,7 +29,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 	
 		_ct = Content.GetComponent<MasterLobbyContent> ();
 
-		_conn = new TestConnection (url, port);
+		_conn = new TestConnection ();
 		_conn.setDelegate (this);
 		_conn.startTest ();
 
@@ -40,7 +40,6 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 
 		StartCoroutine ("receiveRules");
 		StartCoroutine ("receiveConnectionStatus");
-
 	}
 
 	#region Socket Connection
@@ -114,7 +113,11 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 				yield return null;
 			}
 
+			Debug.Log ("receive status");
+
 			if (success == 1) {
+
+				overlay.GetComponent<LobbyOverlay> ().hideErrorWindow ();
 
 			} else if(success == 0){
 				overlay.SetActive (true);
@@ -123,7 +126,7 @@ public class MasterLobby : MonoBehaviour,SocketConnectionInterface,TestConnectio
 				overlay.GetComponent<LobbyOverlay> ().showErrorWindow ();
 			}
 
-			break;
+			success = -1;
 		}
 	}
 
