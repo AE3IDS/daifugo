@@ -5,36 +5,33 @@ public class Table : MonoBehaviour {
 
 
 	private const string tablePlayerTag = "tablePlayer";
-	public GameObject overlay;
+
 	public GameObject userActions;
 	public GameObject user;
-	public GameObject cards;
-
-	public GameObject f;
-	private bool test =false;
-
-	// Use this for initialization
+	public GameObject card;
 
 
 
-	void Awake(){
-
-	}
-
-
-
-	void Start () {
-
-//		addUser("asdfs",1);
-//		addUser ("asdfs", 5);
-	}
+	/*
+	 * 
+	 * Start Distribute the Cards
+	 * 
+	 */
 
 	public void distribute(){
-		f.GetComponent<Animator> ().SetBool ("distribute", true);
+
+		card.SetActive (true);
 	}
 
-	public void showCardUser(){
 
+
+	/*
+	 * 
+	 * hide user button
+	 * 
+	 */ 
+
+	public void showCardUser(){
 
 		// hide all user action buttons
 		int childCount = userActions.transform.childCount;
@@ -43,18 +40,9 @@ public class Table : MonoBehaviour {
 			GameObject child = userActions.transform.GetChild (m).gameObject;
 			child.GetComponent<Animator> ().SetBool ("showCard", true);
 		}
-
-
-		Invoke ("show", 1.3f);
-
-
+			
 	}
 
-	private void show(){
-
-		overlay.SetActive (true);
-		overlay.GetComponent<OverlayScript> ().toggleCards ();
-	}
 
 	/*
 	 * 
@@ -65,18 +53,6 @@ public class Table : MonoBehaviour {
 	public void addOwnerId(string id){
 
 		user.GetComponent<UserTable> ().userId = id;
-
-	}
-
-
-
-	/*
-	 * 
-	 * Start Distribute the Cards
-	 * 
-	 */
-
-	public void distribute1(){
 
 	}
 
