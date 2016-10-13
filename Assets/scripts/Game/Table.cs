@@ -22,27 +22,7 @@ public class Table : MonoBehaviour {
 
 		card.SetActive (true);
 	}
-
-
-
-	/*
-	 * 
-	 * hide user button
-	 * 
-	 */ 
-
-	public void showCardUser(){
-
-		// hide all user action buttons
-		int childCount = userActions.transform.childCount;
-
-		 for (int m = 0; m < childCount; m++) {
-			GameObject child = userActions.transform.GetChild (m).gameObject;
-			child.GetComponent<Animator> ().SetBool ("showCard", true);
-		}
-			
-	}
-
+		
 
 	/*
 	 * 
