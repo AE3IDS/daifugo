@@ -11,22 +11,21 @@ public class UserTable : MonoBehaviour {
 
 	private const float CARD_SPACE = 28.0f;
 	private const float CARD_Y = 21.0f;
-	private float cardX = -146.0f;
+	private float cardX = -170.0f;
 
 	private string _userId;
 	public string userId { get { return this._userId; } set { this._userId = value; } }
 
 
-	private bool _isOccupied;
+	private bool _isOccupied = false;
 	public bool spaceOccupied { get { return this._isOccupied; } set {this._isOccupied = value; }}
 
-	void Start () {
-		_isOccupied = false;
-	}
 
-	void Update () {
-	
-	}
+	/*
+	 * 
+	 * spawn the correct avatar based on the photoId
+	 * 
+	 */ 
 
 	public void addPhoto(int photoId){
 
@@ -72,19 +71,28 @@ public class UserTable : MonoBehaviour {
 	private void addCards(){
 		
 		GameObject card = Instantiate (cardBack,Vector3.zero, gameObject.transform.rotation) as GameObject;
-		card.transform.SetParent (gameObject.transform, false);
+
+
+		// set the parent of the gameobject
+
+		card.transform.SetParent (transform);
+
+
+		// Play animation
+
 		card.GetComponent<Animator> ().SetBool ("showCard", true);
 
 
-		RectTransform m = card.GetComponent<RectTransform> ();
-		m.anchoredPosition = new Vector2 (cardX, CARD_Y);
+		// Set the coordinate
+
+		card.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (cardX, CARD_Y);
+
 
 		cardX = cardX + CARD_SPACE;
 	}
 
 	void OnCollisionEnter2D(Collision2D c){
-		Debug.Log ("collision");
-
+		Destroy (c.gameObject);
 		addCards ();
 
 	}
