@@ -6,11 +6,9 @@ public class Table : MonoBehaviour {
 
 	private const string tablePlayerTag = "tablePlayer";
 
-	public GameObject userActions;
 	public GameObject user;
 	public GameObject card;
-
-
+	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 
 	/*
 	 * 
@@ -21,8 +19,10 @@ public class Table : MonoBehaviour {
 	public void distribute(){
 
 		card.SetActive (true);
+
 	}
-		
+
+			
 
 	/*
 	 * 
@@ -32,8 +32,19 @@ public class Table : MonoBehaviour {
 
 	public void addOwnerId(string id){
 
-		user.GetComponent<UserTable> ().userId = id;
+		user.GetComponent<Mainuser> ().userId = id;
 
+	}
+
+	GameObject spawn(string anim){
+
+		GameObject d = Instantiate (card, card.GetComponent<RectTransform>().anchoredPosition3D, Quaternion.identity) as GameObject;
+		d.transform.SetParent (transform);
+		d.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
+		d.transform.SetSiblingIndex (2);
+		d.GetComponent<Animator> ().SetBool (anim, true);
+
+		return d;
 	}
 
 		
@@ -69,7 +80,5 @@ public class Table : MonoBehaviour {
 
 	// Update is called once per frame
 
-	void Update () {
-	
-	}
+
 }
