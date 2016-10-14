@@ -10,6 +10,32 @@ public class Table : MonoBehaviour {
 	public GameObject card;
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 
+
+	/*
+	 * 
+	 * Coroutine to distribute cards
+	 * 
+	 */
+
+
+	IEnumerator distributeCardCoroutine(){
+
+		int i = 0;
+		while (i != 53) {
+
+			GameObject f = spawn (cardStates[(i)%4]);
+
+//			while(f.GetComponent<Animator> ().IsInTransition (0)) {
+//				yield return null;
+//			}
+
+			yield return new WaitForSeconds (0.9f);
+			i++;
+		}
+		card.SetActive (false);
+	}
+
+
 	/*
 	 * 
 	 * Start Distribute the Cards
@@ -19,10 +45,10 @@ public class Table : MonoBehaviour {
 	public void distribute(){
 
 		card.SetActive (true);
+		StartCoroutine ("distributeCardCoroutine");
 
 	}
-
-			
+		
 
 	/*
 	 * 
