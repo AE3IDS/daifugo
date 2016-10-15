@@ -35,20 +35,30 @@ public class Table : MonoBehaviour {
 	 * 
 	 */
 
-	void switchTurn(string id){
+	public void switchTurn(string id){
 
 		if (prevTurn != null) {
 			prevTurn.toggleTurn ();
 		}
 
+		bool found = false;
 
 		for (int i = 0; i < otherPlayers.Length; i++) {
 			UserTable t = otherPlayers [i].GetComponent<UserTable>();
 			if (t.userId == id) {
 				t.toggleTurn ();
 				prevTurn = t;
+				found = true;
 			}
 		}
+
+		if (!found) {
+
+			user.GetComponent<Mainuser> ().toggleTurn ();
+			prevTurn = user.GetComponent<Mainuser> ();
+
+		}
+
 
 	}
 
