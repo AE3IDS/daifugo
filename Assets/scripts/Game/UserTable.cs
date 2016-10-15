@@ -6,6 +6,8 @@ public class UserTable : MonoBehaviour {
 
 	public GameObject avatar;
 	public GameObject numOfCardsLabel;
+	public GameObject turnArrow;
+
 	private int numOfCards = 0;
 
 	/* Private variables */
@@ -13,10 +15,10 @@ public class UserTable : MonoBehaviour {
 	private const float CARD_SPACE = 28.0f;
 	private const float CARD_Y = 21.0f;
 	private float cardX = -170.0f;
+	private bool turn = false;
 
 	private string _userId;
 	public string userId { get { return this._userId; } set { this._userId = value; } }
-
 
 	private bool _isOccupied = false;
 	public bool spaceOccupied { get { return this._isOccupied; } set {this._isOccupied = value; }}
@@ -85,6 +87,13 @@ public class UserTable : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D c){
 		Destroy (c.gameObject);
 		addCards ();
+
+	}
+
+	public void toggleTurn(){
+
+		turn = !turn;
+		turnArrow.SetActive (turn);
 
 	}
 
