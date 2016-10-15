@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class UserTable : MonoBehaviour {
 
 	public GameObject avatar;
-	public GameObject cardBack;
+	public GameObject numOfCardsLabel;
+	private int numOfCards = 0;
 
 	/* Private variables */
 
@@ -69,26 +70,16 @@ public class UserTable : MonoBehaviour {
 	}
 
 	private void addCards(){
-		
-		GameObject card = Instantiate (cardBack,Vector3.zero, gameObject.transform.rotation) as GameObject;
 
+		numOfCards++;
 
-		// set the parent of the gameobject
+		Text t = numOfCardsLabel.GetComponent<Text> ();
 
-		card.transform.SetParent (transform);
+		char[] space = new char[]{ '-',' ' };
+		string[] s = t.text.Split (space, 2);
 
+		t.text = numOfCards.ToString () + " " + s [1];
 
-		// Play animation
-
-		card.GetComponent<Animator> ().SetBool ("showCard", true);
-
-
-		// Set the coordinate
-
-		card.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (cardX, CARD_Y);
-
-
-		cardX = cardX + CARD_SPACE;
 	}
 
 	void OnCollisionEnter2D(Collision2D c){
