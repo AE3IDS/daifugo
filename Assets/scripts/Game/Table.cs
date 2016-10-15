@@ -128,20 +128,19 @@ public class Table : MonoBehaviour {
 
 	public void addUser(string userid, int photoId){
 
-		UserTable emptyUser = null;
-
 		for(int i =0 ; i < otherPlayers.Length;i++){
 
-			emptyUser = otherPlayers [i].GetComponent<UserTable>();
+			UserTable emptyUser = otherPlayers [i].GetComponent<UserTable>();
 
 			if (!emptyUser.spaceOccupied) {
+				
+				emptyUser.userId = userid;
+				emptyUser.addPhoto (photoId);
+				emptyUser.spaceOccupied = true;
+
 				break;
 			}
 		}
-
-		emptyUser.userId = userid;
-		emptyUser.addPhoto (photoId);
-		emptyUser.spaceOccupied = true;
 	}
 
 
