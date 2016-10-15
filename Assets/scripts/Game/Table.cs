@@ -10,6 +10,8 @@ public class Table : MonoBehaviour {
 	public GameObject card;
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
+	private UserTable prevTurn = null;
+
 
 
 	void Start(){
@@ -27,6 +29,28 @@ public class Table : MonoBehaviour {
 	}
 
 
+	/*
+	 * 
+	 * Switch the players turn
+	 * 
+	 */
+
+	void switchTurn(string id){
+
+		if (prevTurn != null) {
+			prevTurn.toggleTurn ();
+		}
+
+
+		for (int i = 0; i < otherPlayers.Length; i++) {
+			UserTable t = otherPlayers [i].GetComponent<UserTable>();
+			if (t.userId == id) {
+				t.toggleTurn ();
+				prevTurn = t;
+			}
+		}
+
+	}
 
 
 
@@ -40,6 +64,9 @@ public class Table : MonoBehaviour {
 	IEnumerator distributeCardCoroutine(){
 
 		int i = 0;
+
+		yield return new WaitForSeconds (0.8f);
+
 		while (i != 52) {
 
 			GameObject f = spawn (cardStates[(i)%4]);
