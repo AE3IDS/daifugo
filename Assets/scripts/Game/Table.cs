@@ -9,6 +9,25 @@ public class Table : MonoBehaviour {
 	public GameObject user;
 	public GameObject card;
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
+	private GameObject[] otherPlayers = new GameObject[3];
+
+
+	void Start(){
+
+		int childCount = gameObject.transform.childCount;
+	
+		for(int i =0 ; i < childCount;i++){
+
+			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
+
+			if (childObject.tag == tablePlayerTag) {
+				otherPlayers [i] = childObject;
+			}
+		}
+	}
+
+
+
 
 
 	/*
@@ -21,7 +40,7 @@ public class Table : MonoBehaviour {
 	IEnumerator distributeCardCoroutine(){
 
 		int i = 0;
-		while (i != 53) {
+		while (i != 52) {
 
 			GameObject f = spawn (cardStates[(i)%4]);
 
@@ -82,29 +101,21 @@ public class Table : MonoBehaviour {
 
 	public void addUser(string userid, int photoId){
 
-		int childCount = gameObject.transform.childCount;
-		GameObject emptySpace = null;
-		UserTable t = null;
+		UserTable emptyUser = null;
 
-		for(int i =0 ; i < childCount;i++){
+		for(int i =0 ; i < otherPlayers.Length;i++){
 
-			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
-			t = childObject.GetComponent<UserTable> ();
+			emptyUser = otherPlayers [i].GetComponent<UserTable>();
 
-			if (childObject.tag == tablePlayerTag && !t.spaceOccupied) {
-				
-				emptySpace = childObject;
+			if (!emptyUser.spaceOccupied) {
 				break;
-
 			}
 		}
 
-		t.userId = userid;
-		t.addPhoto (photoId);
-		t.spaceOccupied = true;
+		emptyUser.userId = userid;
+		emptyUser.addPhoto (photoId);
+		emptyUser.spaceOccupied = true;
 	}
-
-	// Update is called once per frame
 
 
 }
