@@ -10,6 +10,9 @@ public static class Constant{
 	public const int FETCHRULE_CODE = 105;
 	public const int LOBBYDETAILS_CODE = 106;
 	public const int TURN_CODE = 107;
+	public const int CARD_CODE = 108;
+	public const int REQUESTCARD_CODE = 109;
+	public const int STARTGAME_CODE = 110;
 
 	public const int GAMEROOM_OCCUPIED = 50;
 
