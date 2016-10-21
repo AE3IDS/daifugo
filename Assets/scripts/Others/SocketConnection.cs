@@ -48,7 +48,7 @@ public class SocketConnection : MonoBehaviour{
 
 		Debug.Log ("start connecting");
 
-		_sock = new WebSocket ("ws://192.168.2.1:3000",new string[] { "echo-protocol" });
+		_sock = new WebSocket ("ws://192.168.2.1:3000",null);
 
 		//OnMessage event handler
 
@@ -90,6 +90,10 @@ public class SocketConnection : MonoBehaviour{
 		requestPool.Add (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE,dt));
 	}
 		
+	public void requestCard(Dictionary<string,object> dt){
+		requestPool.Add (JSONMaker.makeJSON(Constant.REQUESTCARD_CODE,dt));
+	}
+
 	public void greetServer(Dictionary<string,object> dt){
 		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE,dt));
 	}
