@@ -134,7 +134,7 @@ public class Table : MonoBehaviour {
 	public void initializeTable(string turnId){
 
 		card.SetActive (true);
-		StartCoroutine ("distributeCardCoroutine");
+		StartCoroutine (initializeCoroutine(turnId));
 
 	}
 		
