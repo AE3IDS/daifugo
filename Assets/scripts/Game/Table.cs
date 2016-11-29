@@ -103,6 +103,7 @@ public class Table : MonoBehaviour {
 	}
 
 
+
 	/* instantiates new card prefab for distribution */
 
 	GameObject spawn(string anim){
@@ -119,9 +120,12 @@ public class Table : MonoBehaviour {
 	}
 
 
-	/* start the above's coroutine */
+	/* 
+	 * perform initialization of the game table;  
+	 * distribute and assign the correct turn
+	 */
 		
-	public void distribute(){
+	public void initializeTable(string turnId){
 
 		card.SetActive (true);
 		StartCoroutine ("distributeCardCoroutine");
