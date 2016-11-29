@@ -56,9 +56,9 @@ public class CardSpawner{
 			return _heartSuit;
 		} else if (key == 1) {
 			return _clubSuit;
-		} else if (key == 2) {
-			return _diamondSuit;
 		} else if (key == 3) {
+			return _diamondSuit;
+		} else if (key == 2) {
 			return _spadesSuit;
 		}
 
@@ -72,9 +72,9 @@ public class CardSpawner{
 			return "hearts";
 		} else if (key == 1) {
 			return "club";
-		} else if (key == 2) {
-			return "diamonds";
 		} else if (key == 3) {
+			return "diamonds";
+		} else if (key == 2) {
 			return "spades";
 		}
 
