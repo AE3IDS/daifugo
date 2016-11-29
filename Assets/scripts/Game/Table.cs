@@ -11,93 +11,116 @@ public class Table : MonoBehaviour {
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
 	private UserTable prevTurn = null;
+	private int[,] cards;
 
 
 
 	void Start(){
 
 		int childCount = gameObject.transform.childCount;
+		int counter = 0;
 	
-		for(int i =0 ; i < childCount;i++){
+		for(int i = 0; i < childCount;i++){
 
 			GameObject childObject = gameObject.transform.GetChild (i).gameObject;
 
 			if (childObject.tag == tablePlayerTag) {
-				otherPlayers [i] = childObject;
+				otherPlayers [counter++] = childObject;
 			}
 		}
+
+	}
+
+	public void card1(int[,] m){
+
+		cards = m;
 	}
 
 
-	/*
-	 * 
-	 * Switch the players turn
-	 * 
-	 */
+	/*   Switch the players turn   */
 
 	public void switchTurn(string id){
+
+
+		/* Toggle the turn of the last player */
 
 		if (prevTurn != null) {
 			prevTurn.toggleTurn ();
 		}
 
+
+		/* Find the player for next turn based on id */
+
 		bool found = false;
 
 		for (int i = 0; i < otherPlayers.Length; i++) {
-			UserTable t = otherPlayers [i].GetComponent<UserTable>();
+			UserTable t = otherPlayers [i].GetComponent<UserTable> ();
 			if (t.userId == id) {
 				t.toggleTurn ();
 				prevTurn = t;
 				found = true;
+				break;
 			}
 		}
 
-		if (!found) {
+		/* found == false, main players turn */ 
 
+		if (!found) {
 			user.GetComponent<Mainuser> ().toggleTurn ();
 			prevTurn = user.GetComponent<Mainuser> ();
 
 		}
-
-
+			
 	}
 
 
 
-	/*
-	 * 
-	 * Coroutine to distribute cards
-	 * 
-	 */
-
+	/*  a coroutine to distributes the cards */
 
 	IEnumerator distributeCardCoroutine(){
 
 		int i = 0;
+		int cardCounter = 0;
+		int y = 3;
 
 		yield return new WaitForSeconds (0.8f);
 
 		while (i != 52) {
 
-			GameObject f = spawn (cardStates[(i)%4]);
+			spawn (cardStates[(i)%4]);
 
-//			while(f.GetComponent<Animator> ().IsInTransition (0)) {
-//				yield return null;
-//			}
+			if (i == y) {
+				user.GetComponent<Mainuser> ().addCards (cards[cardCounter,0]-1,cards[cardCounter,1]);
+				cardCounter++;
+				y += 4;
+			}
 
 			yield return new WaitForSeconds (0.9f);
 			i++;
+				
 		}
 		card.SetActive (false);
 	}
 
 
-	/*
-	 * 
-	 * Start Distribute the Cards
-	 * 
-	 */
+	/* instantiates new card prefab for distribution */
 
+	GameObject spawn(string anim){
+
+		GameObject d = Instantiate (card, card.GetComponent<RectTransform>().anchoredPosition3D, Quaternion.identity) as GameObject;
+
+		d.transform.SetParent (transform);
+
+		d.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
+		d.transform.SetSiblingIndex (2);
+		d.GetComponent<Animator> ().SetBool (anim, true);
+
+		return d;
+	}
+
+
+	/* start the above's coroutine */
+		
 	public void distribute(){
 
 		card.SetActive (true);
@@ -106,11 +129,7 @@ public class Table : MonoBehaviour {
 	}
 		
 
-	/*
-	 * 
-	 * add user Id to owner
-	 * 
-	 */
+	/* 	add userId to the main player 	*/
 
 	public void addOwnerId(string id){
 
@@ -118,23 +137,8 @@ public class Table : MonoBehaviour {
 
 	}
 
-	GameObject spawn(string anim){
 
-		GameObject d = Instantiate (card, card.GetComponent<RectTransform>().anchoredPosition3D, Quaternion.identity) as GameObject;
-		d.transform.SetParent (transform);
-		d.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
-		d.transform.SetSiblingIndex (2);
-		d.GetComponent<Animator> ().SetBool (anim, true);
-
-		return d;
-	}
-
-		
-	/*
-	 * 
-	 * Get the first vacant seat on the table
-	 * 
-	 */ 
+	/*  add new player to the first vacant seat  */ 
 
 	public void addUser(string userid, int photoId){
 
