@@ -20,7 +20,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 	private int _responseCode;
 	private JObject _responseData;
 	private SocketConnection _socket;
-
+	private Dictionary <string,object> userId;
 
 
 	void changeRound(string roundInt){
@@ -37,38 +37,61 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 				yield return null;
 			}
 				
+			int temp = _responseCode;
 
-			if (_responseCode == Constant.GREET_CODE) {
+			switch (_responseCode) {
 
-				changeRound (_responseData ["round"].ToString ());
+				case Constant.GREET_CODE:
+					changeRound (_responseData ["round"].ToString ());
+					yield return new WaitForSeconds (0.6f);
+					_overlayscriptComponent.toggleLoadingText ();
+					_overlayscriptComponent.toggleWaitingText ();
 
-				yield return new WaitForSeconds (0.6f);
+					break;
 
-				_overlayscriptComponent.toggleLoadingText ();
-				_overlayscriptComponent.toggleWaitingText ();
+				case Constant.NEWPLAYER_CODE:
+					_tableComponent.addUser (_responseData.GetValue ("userId").ToString (), _responseData.GetValue ("photoId").ToObject<int> ());
+					break;
+				
+				case Constant.GAMEROOM_OCCUPIED:
+					_overlayscriptComponent.toggle ();
+					_overlayscriptComponent.toggleWaitingText ();
+					_socket.requestCard (userId);
 
-			} else if (_responseCode == Constant.NEWPLAYER_CODE) {
+					break;
 
-//				Debug.Log ("new player");
+				case Constant.CARD_CODE:
+					JArray t = JArray.Parse (_responseData.GetValue ("cards").ToString ());
+					int[,] cards = new int[t.Count, 2];
+			
+					for (int i = 0; i < t.Count; i++) {
+						JObject j = JObject.Parse (t.GetItem (i).ToString ());
+						cards [i, 0] = j.GetValue ("_suit").ToObject<int> ();
+						cards [i, 1] = j.GetValue ("_kind").ToObject<int> ();
+					}
+			
+					_tableComponent.card1 (cards);
+					_socket.setReady (userId);	
 
-				_tableComponent.addUser (_responseData.GetValue ("userId").ToString(), _responseData.GetValue ("photoId").ToObject<int>());
+					break;
 
-			} else if (_responseCode == Constant.GAMEROOM_OCCUPIED) {
-
-				Debug.Log ("occupied");
-
-				// hide overlay
-
-				_overlayscriptComponent.toggle();
-				_overlayscriptComponent.toggleWaitingText ();
-
-
-				//distribute cards
-
+				case Constant.STARTGAME_CODE:
+					string turnId = _responseData.GetValue ("turn").ToString ();
+					_tableComponent.distribute ();
+					_tableComponent.switchTurn (turnId);
+					
+					break;
 			}
 
 
-			_hasReceivedData = false;
+
+
+
+			if (temp == _responseCode) {
+				_hasReceivedData = false;
+			}
+
+
 		}
 
 	}
@@ -109,11 +132,11 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		_socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
 		_socket.setDelegate (this);
 
-		Dictionary <string,object> obj = new Dictionary<string, object> {
+		userId = new Dictionary<string, object> {
 			{ "userId",PlayerPrefs.GetString ("user") }
 		};
 
-		_socket.greetServer (obj);
+		_socket.greetServer (userId);
 
 
 		// show overlay and loading text
