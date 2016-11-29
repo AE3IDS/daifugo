@@ -39,7 +39,7 @@ public class Table : MonoBehaviour {
 
 	/*   Switch the players turn   */
 
-	public void switchTurn(string id){
+	private void switchTurn(string id){
 
 
 		/* Toggle the turn of the last player */
@@ -77,7 +77,9 @@ public class Table : MonoBehaviour {
 
 	/*  a coroutine to distributes the cards */
 
-	IEnumerator distributeCardCoroutine(){
+	IEnumerator initializeCoroutine(string turnId){
+
+		/* distribute the cards */
 
 		int i = 0;
 		int cardCounter = 0;
@@ -100,6 +102,10 @@ public class Table : MonoBehaviour {
 				
 		}
 		card.SetActive (false);
+
+		/* assign the turn */
+
+		switchTurn (turnId);
 	}
 
 
