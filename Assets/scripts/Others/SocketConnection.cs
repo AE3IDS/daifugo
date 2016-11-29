@@ -83,6 +83,10 @@ public class SocketConnection : MonoBehaviour{
 		this._delegator = i;
 	}
 
+	public void setReady(Dictionary<string,object> dt){
+		Debug.Log ("set ready");
+		requestPool.Add (JSONMaker.makeJSON(Constant.READY_CODE,dt));
+	}
 
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
@@ -91,7 +95,7 @@ public class SocketConnection : MonoBehaviour{
 	}
 		
 	public void requestCard(Dictionary<string,object> dt){
-		requestPool.Add (JSONMaker.makeJSON(Constant.REQUESTCARD_CODE,dt));
+		requestPool.Add (JSONMaker.makeJSON(Constant.CARD_CODE,dt));
 	}
 
 	public void greetServer(Dictionary<string,object> dt){
