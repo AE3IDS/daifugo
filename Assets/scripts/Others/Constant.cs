@@ -12,7 +12,8 @@ public static class Constant{
 	public const int TURN_CODE = 107;
 	public const int CARD_CODE = 108;
 	public const int REQUESTCARD_CODE = 109;
-	public const int STARTGAME_CODE = 110;
+	public const int READY_CODE = 110;
+	public const int STARTGAME_CODE = 111;
 
 	public const int GAMEROOM_OCCUPIED = 50;
 
