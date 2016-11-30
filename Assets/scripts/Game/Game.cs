@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
 using Newtonsoft.Json.Linq;
 
@@ -23,84 +24,108 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 	private Dictionary <string,object> userId;
 
 
+
+	IEnumerator receiveDataCoroutine(){
+
+		while (true) {
+
+			while (!_hasReceivedData)
+				yield return null; 
+			
+			int temp = _responseCode;
+
+			switch (_responseCode) {
+
+				case Constant.GREET_CODE:
+					greetCodeHandler ();
+					break;
+
+				case Constant.NEWPLAYER_CODE:
+					newPlayerHandler ();
+					break;
+				
+				case Constant.GAMEROOM_OCCUPIED:
+					gameRoomOccupiedCodeHandler ();
+					break;
+
+				case Constant.CARD_CODE:
+					cardCodeHandler ();
+					break;
+
+				case Constant.STARTGAME_CODE:
+					startGameHandler ();	
+					break;
+			}
+
+			_hasReceivedData = !(temp == _responseCode);
+		}
+
+	}
+
+
 	void changeRound(string roundInt){
 		string[] g = _roundTextComponent.text.Split (' ');
 		_roundTextComponent.text = g [0] + " " + roundInt;
 	}
 
 
-	IEnumerator receiveDataCoroutine(){
+	private void newPlayerHandler(){
+		
+		string userId = _responseData.GetValue ("userId").ToString ();
+		int photoId = _responseData.GetValue ("photoId").ToObject<int> ();
 
-		while (true) {
-
-			while (!_hasReceivedData) {
-				yield return null;
-			}
-				
-			int temp = _responseCode;
-
-			switch (_responseCode) {
-
-				case Constant.GREET_CODE:
-					changeRound (_responseData ["round"].ToString ());
-					yield return new WaitForSeconds (0.6f);
-					_overlayscriptComponent.toggleLoadingText ();
-					_overlayscriptComponent.toggleWaitingText ();
-
-					break;
-
-				case Constant.NEWPLAYER_CODE:
-					_tableComponent.addUser (_responseData.GetValue ("userId").ToString (), _responseData.GetValue ("photoId").ToObject<int> ());
-					break;
-				
-				case Constant.GAMEROOM_OCCUPIED:
-					_overlayscriptComponent.toggle ();
-					_overlayscriptComponent.toggleWaitingText ();
-					_socket.requestCard (userId);
-
-					break;
-
-				case Constant.CARD_CODE:
-					JArray t = JArray.Parse (_responseData.GetValue ("cards").ToString ());
-					int[,] cards = new int[t.Count, 2];
-			
-					for (int i = 0; i < t.Count; i++) {
-						JObject j = JObject.Parse (t.GetItem (i).ToString ());
-						cards [i, 0] = j.GetValue ("_suit").ToObject<int> ();
-						cards [i, 1] = j.GetValue ("_kind").ToObject<int> ();
-					}
-			
-					_tableComponent.card1 (cards);
-					_socket.setReady (userId);	
-
-					break;
-
-				case Constant.STARTGAME_CODE:
-								
-					JToken turnPhotoToken = _responseData.GetValue ("turnPhotoId");
-					string turnPhotoId = turnPhotoToken.ToString (); 
-
-					JToken turnIdToken = _responseData.GetValue ("turnUserId");
-					string turnId = turnIdToken.ToString ();
+		_tableComponent.addUser (userId, photoId);
+	}
 
 
-					_tableComponent.initializeTable (turnId);
-						
-					break;
-			}
+	private void gameRoomOccupiedCodeHandler(){
+		
+		_overlayscriptComponent.toggle ();
+		_overlayscriptComponent.toggleWaitingText ();
+		_socket.requestCard (userId);
+	}
 
 
+	private void cardCodeHandler(){
 
+		JArray cardsArray = JArray.Parse (_responseData.GetValue ("cards").ToString ());
+		int[,] cards = new int[cardsArray.Count, 2];
 
-
-			if (temp == _responseCode) {
-				_hasReceivedData = false;
-			}
-
-
+		for (int i = 0; i < cardsArray.Count; i++) {
+			JObject j = JObject.Parse (cardsArray.GetItem (i).ToString ());
+			cards [i, 0] = j.GetValue ("_suit").ToObject<int> ();
+			cards [i, 1] = j.GetValue ("_kind").ToObject<int> ();
 		}
 
+		_tableComponent.card1 (cards);
+		_socket.setReady (userId);	
 	}
+
+
+	private void startGameHandler(){
+
+		JToken turnPhotoToken = _responseData.GetValue ("turnPhotoId");
+		int turnPhotoId = turnPhotoToken.ToObject<int> ();
+
+		JToken turnIdToken = _responseData.GetValue ("turnUserId");
+		string turnId = turnIdToken.ToString ();
+
+		_tableComponent.initializeTable (turnId,turnPhotoId);
+	}
+
+
+	private void greetCodeHandler(){
+
+		changeRound (_responseData ["round"].ToString ());
+		_overlayscriptComponent.toggleLoadingText ();
+		_overlayscriptComponent.toggleWaitingText ();
+
+	}
+
+	public void handleError(){
+
+	}
+
 
 	#region SocketConnectionInterface
 
@@ -114,10 +139,6 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 		_hasReceivedData = true;
 
-	}
-
-	public void handleError(){
-		Debug.Log ("game e");
 	}
 
 	#endregion
