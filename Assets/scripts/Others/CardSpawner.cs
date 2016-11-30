@@ -20,12 +20,12 @@ public class CardSpawner{
 		_spadesSuit = new Dictionary<int, string> ();
 
 	
-		string[] r = new string[] { "_of_hearts", "_of_clubs", "_of_spades", "_of_diamonds" };
+		string[] r = new string[] { "_of_hearts", "_of_clubs","_of_diamonds","_of_spades"};
 
 		for (int i = 0; i < r.Length; i++) {	
-			for (int j = 2; j < 16; j++) {
+			for (int j = 3; j < 16; j++) {
 				
-				Dictionary<int,string> g = getDictionaryForKey (i);
+				Dictionary<int,string> g = getDictionaryForKey (i+1);
 				g.Add (j,j.ToString()+r[i] );
 
 			}
@@ -52,13 +52,13 @@ public class CardSpawner{
 
 	private Dictionary<int,string> getDictionaryForKey(int key){
 
-		if (key == 0) {
+		if (key == 1) {
 			return _heartSuit;
-		} else if (key == 1) {
+		} else if (key == 2) {
 			return _clubSuit;
 		} else if (key == 3) {
 			return _diamondSuit;
-		} else if (key == 2) {
+		} else if (key == 4) {
 			return _spadesSuit;
 		}
 
@@ -68,13 +68,13 @@ public class CardSpawner{
 
 	private string getFolderNameForKey(int key){
 
-		if (key == 0) {
+		if (key == 1) {
 			return "hearts";
-		} else if (key == 1) {
+		} else if (key == 2) {
 			return "club";
 		} else if (key == 3) {
 			return "diamonds";
-		} else if (key == 2) {
+		} else if (key == 4) {
 			return "spades";
 		}
 
