@@ -76,10 +76,16 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 					break;
 
 				case Constant.STARTGAME_CODE:
-					string turnId = _responseData.GetValue ("turn").ToString ();
-					_tableComponent.distribute ();
-					_tableComponent.switchTurn (turnId);
-					
+								
+					JToken turnPhotoToken = _responseData.GetValue ("turnPhotoId");
+					string turnPhotoId = turnPhotoToken.ToString (); 
+
+					JToken turnIdToken = _responseData.GetValue ("turnUserId");
+					string turnId = turnIdToken.ToString ();
+
+
+					_tableComponent.initializeTable (turnId);
+						
 					break;
 			}
 
