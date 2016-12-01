@@ -77,7 +77,7 @@ public class Table : MonoBehaviour {
 
 	/*  a coroutine to distributes the cards */
 
-	IEnumerator initializeCoroutine(string turnId){
+	IEnumerator initializeCoroutine(string turnId, int turnPhotoId){
 
 		/* distribute the cards */
 
@@ -92,7 +92,7 @@ public class Table : MonoBehaviour {
 			spawn (cardStates[(i)%4]);
 
 			if (i == y) {
-				user.GetComponent<Mainuser> ().addCards (cards[cardCounter,0]-1,cards[cardCounter,1]);
+				user.GetComponent<Mainuser> ().addCards (cards[cardCounter,0],cards[cardCounter,1]);
 				cardCounter++;
 				y += 4;
 			}
@@ -131,10 +131,10 @@ public class Table : MonoBehaviour {
 	 * distribute and assign the correct turn
 	 */
 		
-	public void initializeTable(string turnId){
+	public void initializeTable(string turnId, int turnPhotoId){
 
 		card.SetActive (true);
-		StartCoroutine (initializeCoroutine(turnId));
+		StartCoroutine (initializeCoroutine(turnId,turnPhotoId));
 
 	}
 		
@@ -152,19 +152,19 @@ public class Table : MonoBehaviour {
 
 	public void addUser(string userid, int photoId){
 
-		for(int i =0 ; i < otherPlayers.Length;i++){
+		foreach (GameObject player in otherPlayers) {
 
-			UserTable emptyUser = otherPlayers [i].GetComponent<UserTable>();
+			UserTable emptyUser = player.GetComponent<UserTable>();
 
 			if (!emptyUser.spaceOccupied) {
-				
 				emptyUser.userId = userid;
 				emptyUser.addPhoto (photoId);
 				emptyUser.spaceOccupied = true;
-
 				break;
 			}
 		}
+
+
 	}
 
 
