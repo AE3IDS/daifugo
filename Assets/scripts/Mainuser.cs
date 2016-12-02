@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class Mainuser : UserTable {
 
@@ -27,7 +28,7 @@ public class Mainuser : UserTable {
 	public void addCards(int suit, int rank){
 
 		GameObject j = Instantiate (card, new Vector3(cardXMain,CARD_Y,0), Quaternion.identity) as GameObject;
-
+//		Debug.Log(j.GetComponent<RectTransform>().sizeDelta
 
 		j.GetComponent<Button> ().interactable = false;
 
@@ -95,22 +96,33 @@ public class Mainuser : UserTable {
 
 	}
 
-	/*
-	 * 
-	 * hide user button
-	 * 
-	 */ 
 
-//	public void showCardUser(){
-//
-//		// hide all user action buttons
-//		int childCount = userActions.transform.childCount;
-//
-//		for (int m = 0; m < childCount; m++) {
-//			GameObject child = userActions.transform.GetChild (m).gameObject;
-//			child.GetComponent<Animator> ().SetBool ("showCard", true);
-//		}
-//
-//	}
+	/* Deal Card button handler */
+
+	public void dealCard(){
+
+		SocketConnection _socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
+		List<Dictionary<string,int>[]> s = new List<Dictionary<string, int>[]> ();
+
+
+		foreach (GameObject cardObject in selectedCards) {
+
+			Dictionary<string,int>[] cardItem = new Dictionary<string, int> [2];
+			CardScript cardScript = cardObject.GetComponent<CardScript> ();
+
+			Dictionary<string,int> cardSuit = new Dictionary<string,int> ();
+			cardSuit.Add ("suit", cardScript.cardSuit);
+
+			Dictionary<string,int> cardRank = new Dictionary<string,int> ();
+			cardRank.Add ("kind", cardScript.cardRank);
+
+			cardItem [0] = cardSuit;
+			cardItem [1] = cardRank;
+
+		}
+
+		_socket.sendSelectedCards (s.ToArray());
+	}
+
 
 }
