@@ -49,27 +49,14 @@ public class Mainuser : UserTable {
 		j.GetComponent<Button> ().onClick.AddListener (delegate {
 
 			j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
-			j.GetComponent<Animator> ().SetBool ("clicked", j.GetComponent<CardScript>().cardClicked);
 
+			bool isClicked = j.GetComponent<CardScript>().cardClicked;
+			j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
 
-			if(j.GetComponent<CardScript>().cardClicked){
-
+			if(isClicked){
 				selectedCards.Add(j);
-				j.GetComponent<CardScript> ().cardIndex = ++cardCounter;
-				Debug.Log(j.GetComponent<CardScript> ().cardIndex);
-
 			}else{
-				
-				Debug.Log(j.GetComponent<CardScript> ().cardRank);
-
-				bool success = selectedCards.Remove(j);
-
-				if(success== false){
-					Debug.Log("error remove");
-				}
-					
-				j.GetComponent<CardScript> ().cardIndex = -1;
-				cardCounter--;
+				selectedCards.Remove(j);
 			}
 
 		});
@@ -121,7 +108,7 @@ public class Mainuser : UserTable {
 
 		}
 
-		_socket.sendSelectedCards (s.ToArray());
+		_socket.sendSelectedCards (this.userId, s.ToArray());
 	}
 
 
