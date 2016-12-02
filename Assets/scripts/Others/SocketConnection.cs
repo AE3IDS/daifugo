@@ -86,7 +86,7 @@ public class SocketConnection : MonoBehaviour{
 	}
 
 
-	public void sendSelectedCards(string userId, Dictionary<string,int>[][] dt){
+	public void sendSelectedCards(string userId, Dictionary<string,int>[] dt){
 
 		Dictionary<string,object> heading = new Dictionary<string, object> {
 			{"code",Constant.DEALCARD_CODE},
