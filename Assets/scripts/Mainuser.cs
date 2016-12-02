@@ -89,23 +89,19 @@ public class Mainuser : UserTable {
 	public void dealCard(){
 
 		SocketConnection _socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
-		List<Dictionary<string,int>[]> s = new List<Dictionary<string, int>[]> ();
+		List<Dictionary<string,int>> s = new List<Dictionary<string, int>> ();
 
 
-		foreach (GameObject cardObject in selectedCards) {
+		foreach (GameObject card in selectedCards) {
 
-			Dictionary<string,int>[] cardItem = new Dictionary<string, int> [2];
-			CardScript cardScript = cardObject.GetComponent<CardScript> ();
+			CardScript cardScript = card.GetComponent<CardScript> ();
+		
+			Dictionary<string,int> cardDetails = new Dictionary<string,int> {
+				{ "suit",cardScript.cardSuit },
+				{ "kind",cardScript.cardRank }
+			};
 
-			Dictionary<string,int> cardSuit = new Dictionary<string,int> ();
-			cardSuit.Add ("suit", cardScript.cardSuit);
-
-			Dictionary<string,int> cardRank = new Dictionary<string,int> ();
-			cardRank.Add ("kind", cardScript.cardRank);
-
-			cardItem [0] = cardSuit;
-			cardItem [1] = cardRank;
-
+			s.Add (cardDetails);
 		}
 
 		_socket.sendSelectedCards (this.userId, s.ToArray());
