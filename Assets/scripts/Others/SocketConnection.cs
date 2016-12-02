@@ -83,6 +83,17 @@ public class SocketConnection : MonoBehaviour{
 		this._delegator = i;
 	}
 
+	public void sendSelectedCards(string userId, Dictionary<string,int>[][] dt){
+
+		Dictionary<string,object> heading = new Dictionary<string, object> {
+			{"code",Constant.DEALCARD_CODE},
+			{"userId",userId}
+		};
+
+		string jsonOutput = JSONMaker.makeJSONArray (heading, dt);
+		requestPool.Add (jsonOutput);
+	}
+
 	public void setReady(Dictionary<string,object> dt){
 		Debug.Log ("set ready");
 		requestPool.Add (JSONMaker.makeJSON(Constant.READY_CODE,dt));
