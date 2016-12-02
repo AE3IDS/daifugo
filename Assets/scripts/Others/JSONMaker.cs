@@ -35,8 +35,44 @@ public static class JSONMaker {
 			
 		writer.WriteEndObject ();
 
-
-		return sb.ToString ();
+		return sw.ToString ();
 	}
 
+	public static string makeJSONArray(int code, Dictionary<string,int>[][] data){
+
+		StringBuilder sb = new StringBuilder ();
+		StringWriter sw = new StringWriter (sb);
+
+		JsonWriter writer = new JsonTextWriter (sw);
+
+		writer.Formatting = Formatting.Indented;
+		writer.WriteStartObject ();
+		writer.WritePropertyName ("code");
+		writer.WriteValue (code);
+
+		writer.WritePropertyName ("data");
+		writer.WriteStartArray ();
+
+		foreach (Dictionary<string,int>[] d in data) {
+			
+			writer.WriteStartObject ();
+
+			foreach (Dictionary<string, int> item in d) {
+				
+				foreach (KeyValuePair<string, int> it in item) {
+					writer.WritePropertyName (it.Key);
+					writer.WriteValue (it.Value);
+				}
+
+			}
+
+			writer.WriteEndObject ();
+		}
+
+
+		writer.WriteEndArray ();
+		writer.WriteEndObject ();
+		return sw.ToString ();
+	}
+		
 }
