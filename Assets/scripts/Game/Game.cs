@@ -82,7 +82,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		
 		_overlayscriptComponent.toggle ();
 		_overlayscriptComponent.toggleWaitingText ();
-		_socket.requestCard (userId);
+		_socket.sendRequestForCards (userId);
 	}
 
 
@@ -98,7 +98,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		}
 
 		_tableComponent.card1 (cards);
-		_socket.setReady (userId);	
+		_socket.sendReady (userId);	
 	}
 
 
@@ -147,26 +147,26 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 	void Start () {
 
-		// Initialize private variables
+		/* Initialize private variables */
 
 		_roundTextComponent = round.GetComponent<Text> ();
 		_tableComponent = gameTable.GetComponent<Table> ();
 		_overlayscriptComponent = Overlay.GetComponent<OverlayScript> ();
 
-
-		// find socket from prev scene and send greet message
-
-		_socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
-		_socket.setDelegate (this);
-
 		userId = new Dictionary<string, object> {
 			{ "userId",PlayerPrefs.GetString ("user") }
 		};
 
-		_socket.greetServer (userId);
+
+		/* find socket from prev scene and send greet message */
+
+		_socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
+		_socket.setDelegate (this);
+
+		_socket.sendGreetMessage (userId);
 
 
-		// show overlay and loading text
+		/* show overlay and loading text */
 
 		_overlayscriptComponent.toggle();
 		_overlayscriptComponent.toggleLoadingText ();
