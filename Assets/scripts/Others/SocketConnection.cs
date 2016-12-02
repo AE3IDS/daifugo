@@ -80,8 +80,11 @@ public class SocketConnection : MonoBehaviour{
 	#endregion
 
 	public void setDelegate(SocketConnectionInterface i){
+		
 		this._delegator = i;
+
 	}
+
 
 	public void sendSelectedCards(string userId, Dictionary<string,int>[][] dt){
 
@@ -92,33 +95,35 @@ public class SocketConnection : MonoBehaviour{
 
 		string jsonOutput = JSONMaker.makeJSONArray (heading, dt);
 		requestPool.Add (jsonOutput);
+
 	}
 
-	public void setReady(Dictionary<string,object> dt){
-		Debug.Log ("set ready");
+
+	public void sendReady(Dictionary<string,object> dt){
+
 		requestPool.Add (JSONMaker.makeJSON(Constant.READY_CODE,dt));
+
 	}
+
 
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
-		Debug.Log (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE, dt));
 		requestPool.Add (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE,dt));
+
 	}
+
+
+	public void sendRequestForCards(Dictionary<string,object> dt){
 		
-	public void requestCard(Dictionary<string,object> dt){
 		requestPool.Add (JSONMaker.makeJSON(Constant.CARD_CODE,dt));
+
 	}
 
-	public void greetServer(Dictionary<string,object> dt){
-		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE,dt));
-	}
 
-	public void fetchRules(){
-		requestPool.Add (JSONMaker.makeJSON(Constant.FETCHRULE_CODE));
-	}
-
-	public void getRoom(){
-		requestPool.Add (JSONMaker.makeJSON(Constant.ROOMLIST_CODE));
-	}
+	public void sendGreetMessage(Dictionary<string,object> dt){
 		
+		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE,dt));
+
+	}
+
 }
