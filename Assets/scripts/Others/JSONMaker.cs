@@ -38,7 +38,7 @@ public static class JSONMaker {
 		return sw.ToString ();
 	}
 
-	public static string makeJSONArray(Dictionary<string,object> jsonDetails, Dictionary<string,int>[][] data){
+	public static string makeJSONArray(Dictionary<string,object> jsonDetails, Dictionary<string,int>[] data){
 
 		StringBuilder sb = new StringBuilder ();
 		StringWriter sw = new StringWriter (sb);
@@ -62,19 +62,15 @@ public static class JSONMaker {
 		writer.WritePropertyName ("data");
 		writer.WriteStartArray ();
 
-		foreach (Dictionary<string,int>[] d in data) {
+		foreach (Dictionary<string,int> d in data) {
 			
 			writer.WriteStartObject ();
-
-			foreach (Dictionary<string, int> item in d) {
-				
-				foreach (KeyValuePair<string, int> it in item) {
-					writer.WritePropertyName (it.Key);
-					writer.WriteValue (it.Value);
-				}
-
+		
+			foreach (KeyValuePair<string, int> it in d) {
+				writer.WritePropertyName (it.Key);
+				writer.WriteValue (it.Value);
 			}
-
+				
 			writer.WriteEndObject ();
 		}
 
