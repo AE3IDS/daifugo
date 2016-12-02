@@ -166,6 +166,11 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		_socket.sendGreetMessage (userId);
 
 
+		/* set user Id */
+
+		_tableComponent.addOwnerId (PlayerPrefs.GetString ("user"));
+
+
 		/* show overlay and loading text */
 
 		_overlayscriptComponent.toggle();
