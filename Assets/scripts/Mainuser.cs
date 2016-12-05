@@ -24,45 +24,6 @@ public class Mainuser : UserTable {
 
 	}
 
-	public void addCards(int suit, int rank){
-
-		GameObject j = Instantiate (card, new Vector3(cardXMain,CARD_Y,0), Quaternion.identity) as GameObject;
-//		Debug.Log(j.GetComponent<RectTransform>().sizeDelta
-
-		j.GetComponent<Button> ().interactable = false;
-
-
-		// Set the rank & suit
-
-		j.GetComponent<CardScript> ().setCardDetails (suit, rank);
-		j.transform.SetParent (transform,true);
-
-
-		// Set the x & y coordinate
-
-		j.GetComponent<RectTransform> ().anchoredPosition3D = new Vector3 (cardXMain, CARD_Y, 0);
-
-
-		// add onclick handler to the card
-
-		j.GetComponent<Button> ().onClick.AddListener (delegate {
-
-			j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
-
-			bool isClicked = j.GetComponent<CardScript>().cardClicked;
-			j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
-
-			if(isClicked){
-				selectedCards.Add(j);
-			}else{
-				selectedCards.Remove(j);
-			}
-
-		});
-			
-		cards.Add (j);
-		cardXMain += CARD_SPACE;
-	}
 
 	void OnCollisionEnter2D(Collision2D c)
 	{
@@ -81,6 +42,7 @@ public class Mainuser : UserTable {
 		action.SetActive (_turn);
 
 	}
+		
 
 	/* Deal Card button handler */
 
@@ -118,6 +80,17 @@ public class Mainuser : UserTable {
 
 		selectedCards.Add (j);
 	
+	}
+
+	public List<GameObject> getCards(){
+
+		return cards;
+
+	}
+
+	public List<GameObject> getSelected(){
+
+		return selectedCards;
 	}
 
 }
