@@ -8,6 +8,9 @@ public class Table : MonoBehaviour {
 
 	public GameObject user;
 	public GameObject card;
+	public GameObject userDealtCardsRenderer;
+
+
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
 	private UserTable prevTurn = null;
@@ -144,6 +147,14 @@ public class Table : MonoBehaviour {
 	public void addOwnerId(string id){
 
 		user.GetComponent<Mainuser> ().userId = id;
+
+	}
+
+	/* display dealt cards for a user */
+
+	public void displayDealt(string userId,int[][] cards){
+
+		userDealtCardsRenderer.GetComponent<DealtCardsRenderer> ().displayCards (cards);
 
 	}
 
