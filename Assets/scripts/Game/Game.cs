@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 public class Game : MonoBehaviour,SocketConnectionInterface {
 
@@ -19,7 +20,9 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 	private OverlayScript _overlayscriptComponent;
 	private bool _hasReceivedData = false;
 	private int _responseCode;
+
 	private JObject _responseData;
+
 	private SocketConnection _socket;
 	private Dictionary <string,object> userId;
 
@@ -48,6 +51,10 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 					gameRoomOccupiedCodeHandler ();
 					break;
 
+				case Constant.DEALCARD_CODE:
+					dealCardHandler ();
+					break;
+
 				case Constant.CARD_CODE:
 					cardCodeHandler ();
 					break;
@@ -61,6 +68,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		}
 
 	}
+
 
 
 	void changeRound(string roundInt){
@@ -77,6 +85,23 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		_tableComponent.addUser (userId, photoId);
 	}
 
+	private void dealCardHandler(){
+
+		string userId = (string)_responseData.GetValue ("userId");
+		JArray cardsToken = (JArray)_responseData.SelectToken ("cards");
+
+		List<int[]> cards = new List<int[]> ();
+
+		foreach (JToken s in cardsToken) {
+			JObject cardObject = (JObject)s;
+			int[] card = new int[2]{(int) cardObject.GetValue ("_suit"),
+				(int)cardObject.GetValue ("_kind") };
+			cards.Add (card);
+		}
+
+		_tableComponent.displayDealt (userId, cards.ToArray());
+	}
+
 
 	private void gameRoomOccupiedCodeHandler(){
 		
@@ -88,7 +113,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 	private void cardCodeHandler(){
 
-		JArray cardsArray = JArray.Parse (_responseData.GetValue ("cards").ToString ());
+		JArray cardsArray = (JArray)_responseData.SelectToken("cards");
 		int[,] cards = new int[cardsArray.Count, 2];
 
 		for (int i = 0; i < cardsArray.Count; i++) {
