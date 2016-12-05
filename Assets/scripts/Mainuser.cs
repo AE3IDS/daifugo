@@ -25,6 +25,36 @@ public class Mainuser : UserTable {
 	}
 
 
+	public void addCards(int suit, int rank){
+
+		GameObject j = Instantiate (card, new Vector3(cardXMain,CARD_Y,0), Quaternion.identity) as GameObject;
+
+		j.GetComponent<CardScript> ().setCardDetails (suit, rank);
+		j.GetComponent<Button> ().interactable = false;
+		j.transform.SetParent (transform,true);
+		j.GetComponent<RectTransform> ().anchoredPosition3D = new Vector3 (cardXMain, CARD_Y, 0);
+
+		j.GetComponent<Button> ().onClick.AddListener (delegate {
+
+			j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
+
+			bool isClicked = j.GetComponent<CardScript>().cardClicked;
+			j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
+
+			if(isClicked){
+				selectedCards.Add(j);
+			}else{
+				selectedCards.Remove(j);
+			}
+
+		});
+			
+		cards.Add (j);
+		cardXMain += CARD_SPACE;
+
+	}
+
+
 	void OnCollisionEnter2D(Collision2D c)
 	{
 		Destroy (c.gameObject);
