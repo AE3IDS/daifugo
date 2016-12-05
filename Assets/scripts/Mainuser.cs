@@ -22,7 +22,6 @@ public class Mainuser : UserTable {
 		cards = new List<GameObject> ();
 		selectedCards = new List<GameObject> ();
 
-
 	}
 
 	public void addCards(int suit, int rank){
@@ -83,7 +82,6 @@ public class Mainuser : UserTable {
 
 	}
 
-
 	/* Deal Card button handler */
 
 	public void dealCard(){
@@ -107,5 +105,13 @@ public class Mainuser : UserTable {
 		_socket.sendSelectedCards (this.userId, s.ToArray());
 	}
 
+	/* testing code */
+
+	public void init(){
+
+		cards = new List<GameObject> ();
+		selectedCards = new List<GameObject> ();
+
+	}
 
 }
