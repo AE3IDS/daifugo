@@ -114,4 +114,10 @@ public class Mainuser : UserTable {
 
 	}
 
+	public void addSelected(GameObject j){
+
+		selectedCards.Add (j);
+	
+	}
+
 }
