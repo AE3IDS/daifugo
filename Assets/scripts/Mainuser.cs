@@ -24,32 +24,35 @@ public class Mainuser : UserTable {
 
 	}
 
+	void cardHandler(GameObject j){
+
+		j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
+
+		bool isClicked = j.GetComponent<CardScript>().cardClicked;
+		j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
+
+		if(isClicked){
+			selectedCards.Add(j);
+		}else{
+			selectedCards.Remove(j);
+		}
+
+	}
+
 
 	public void addCards(int suit, int rank){
 
-		GameObject j = Instantiate (card, new Vector3(cardXMain,CARD_Y,0), Quaternion.identity) as GameObject;
+		CardMaker card = new CardMaker ();
 
-		j.GetComponent<CardScript> ().setCardDetails (suit, rank);
-		j.GetComponent<Button> ().interactable = false;
-		j.transform.SetParent (transform,true);
-		j.GetComponent<RectTransform> ().anchoredPosition3D = new Vector3 (cardXMain, CARD_Y, 0);
+		card.setCardDetails (suit, rank);
+		card.setCardInteractable (false);
+		card.getCard ().transform.SetParent (transform, true);
+		card.set3DPosition(new Vector3 (cardXMain, CARD_Y, 0));
+		card.setCardSize(new Vector2(168.0f,250.0f));
 
-		j.GetComponent<Button> ().onClick.AddListener (delegate {
+		card.addHandler (delegate { cardHandler (card.getCard ()); });
 
-			j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
-
-			bool isClicked = j.GetComponent<CardScript>().cardClicked;
-			j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
-
-			if(isClicked){
-				selectedCards.Add(j);
-			}else{
-				selectedCards.Remove(j);
-			}
-
-		});
-			
-		cards.Add (j);
+		cards.Add (card.getCard());
 		cardXMain += CARD_SPACE;
 
 	}
