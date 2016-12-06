@@ -126,7 +126,7 @@ public class Mainuser : UserTable {
 
 		action.SetActive (false);
 
-		base.calculateStartX (cards.Length);
+		base.calculateX (cards.Length);
 
 		StartCoroutine (addCoroutine (base.cardX, cards));
 
