@@ -7,11 +7,6 @@ using System;
 public class Mainuser : UserTable {
 
 	public float CARD_SPACE = 100.0f;
-
-	private const float cardSpace = 45.0f;
-	private Vector2 minCardAnchor = new Vector2 (0.5f, 0.5f);
-	private Vector2 maxCardAnchor = new Vector2(0.5f,0.5f);
-
 	public float CARD_Y = 22.0f;
 	public float cardXMain = 87.0f;
 	public GameObject card;
@@ -22,8 +17,6 @@ public class Mainuser : UserTable {
 	private List<GameObject> cards;
 	private bool _turn = false;
 
-	public GameObject space;
-
 	void Start(){
 
 		cards = new List<GameObject> ();
@@ -32,35 +25,31 @@ public class Mainuser : UserTable {
 	}
 
 
-	void cardHandler(GameObject j){
-
-		j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
-		
-		bool isClicked = j.GetComponent<CardScript>().cardClicked;
-		j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
-
-		if(isClicked){
-			selectedCards.Add(j);
-		}else{
-			selectedCards.Remove(j);
-		}
-
-	}
-
 	public void addCards(int suit, int rank){
 
+		GameObject j = Instantiate (card, new Vector3(cardXMain,CARD_Y,0), Quaternion.identity) as GameObject;
 
-		CardMaker card = new CardMaker ();
+		j.GetComponent<CardScript> ().setCardDetails (suit, rank);
+		j.GetComponent<Button> ().interactable = false;
+		j.transform.SetParent (transform,true);
+		j.GetComponent<RectTransform> ().anchoredPosition3D = new Vector3 (cardXMain, CARD_Y, 0);
 
-		card.setCardDetails (suit, rank);
-		card.setCardInteractable (false);
-		card.getCard ().transform.SetParent (transform, true);
-		card.set3DPosition(new Vector3 (cardXMain, CARD_Y, 0));
-		card.setCardSize(new Vector2(168.0f,250.0f));
+		j.GetComponent<Button> ().onClick.AddListener (delegate {
 
-		card.addHandler (delegate { cardHandler (card.getCard ()); });
-	
-		cards.Add (card.getCard());
+			j.GetComponent<CardScript>().cardClicked = !j.GetComponent<CardScript>().cardClicked;
+
+			bool isClicked = j.GetComponent<CardScript>().cardClicked;
+			j.GetComponent<Animator> ().SetBool ("clicked", isClicked);
+
+			if(isClicked){
+				selectedCards.Add(j);
+			}else{
+				selectedCards.Remove(j);
+			}
+
+		});
+			
+		cards.Add (j);
 		cardXMain += CARD_SPACE;
 
 	}
@@ -70,9 +59,6 @@ public class Mainuser : UserTable {
 	{
 		Destroy (c.gameObject);
 	}
-
-
-
 
 
 	public void toggleTurn(){
@@ -87,62 +73,20 @@ public class Mainuser : UserTable {
 
 	}
 
-	IEnumerator addCoroutine(float startX, int[][] cards){
-
-		yield return new WaitForSeconds (0.6f);
-
-		GameObject[] selectedCardsAr = selectedCards.ToArray ();
-
-		for (int i = 0; i < cards.Length; i++) {
-
-			selectedCards [i].GetComponent<Animator> ().SetBool ("dealt", true);
-			yield return new WaitForSeconds (0.5f);
-//			selectedCards [i].SetActive (false);
-
-
-			GameObject j = (GameObject) Instantiate (card, new Vector3 (startX, 0, 0), Quaternion.identity);
-
-			RectTransform cardRect = j.GetComponent<RectTransform> ();
-
-			j.transform.SetParent (space.transform,true);
-			j.GetComponent<Button> ().interactable = false;
-
-
-			/* set size of the card */
-
-			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
-			cardRect.sizeDelta = new Vector2 (74.0f, containerHeight);
-
-
-			j.GetComponent<CardScript> ().setCardDetails (cards[i][0], cards[i][1]);
-			cardRect.anchorMin = minCardAnchor;
-			cardRect.anchorMax = maxCardAnchor;
-
-			cardRect.anchoredPosition3D = new Vector3 (startX, 0, 0);
-			startX += cardSpace;
-
-			yield return new WaitForSeconds (0.9f);
-		}
-
-		selectedCards.Clear ();
-		yield return null;
-	}
-
-
-	public void endDealt(int[][] cards){
+	public void endDealt(){
 
 		action.SetActive (false);
 
-		float startX = 0.0f;
-
-		if (cards.Length % 2 != 0) {
-			int numOfLeftCards = cards.Length / 2;
-			startX = numOfLeftCards * cardSpace * -1;
+		for (int i =0;i < transform.childCount;i++) {
+			
+			GameObject child = transform.GetChild (i).gameObject;
+			if (selectedCards.Contains (child)) {
+				child.SetActive (false);
+			}
+	
 		}
 
-		StartCoroutine (addCoroutine (startX, cards));
-
-
+		selectedCards.Clear ();
 
 	}
 		
