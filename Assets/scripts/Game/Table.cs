@@ -10,7 +10,6 @@ public class Table : MonoBehaviour {
 	public GameObject card;
 	public GameObject userDealtCardsRenderer;
 
-
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
 	private UserTable prevTurn = null;
@@ -154,7 +153,11 @@ public class Table : MonoBehaviour {
 
 	public void displayDealt(string userId,int[][] cards){
 
-		userDealtCardsRenderer.GetComponent<DealtCardsRenderer> ().displayCards (cards);
+		if (userId.Equals(user.GetComponent<Mainuser> ().userId)) {
+			
+			user.GetComponent<Mainuser> ().endDealt (cards);
+
+		}
 
 	}
 
