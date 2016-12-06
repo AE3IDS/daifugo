@@ -12,9 +12,10 @@ public class UserTable : MonoBehaviour {
 
 	/* Private variables */
 
-	private const float CARD_SPACE = 28.0f;
+	protected float CARD_SPACE = 45.0f;
+	protected float cardX = 0;
+
 	private const float CARD_Y = 21.0f;
-	private float cardX = -170.0f;
 	private bool turn = false;
 
 	private string _userId;
@@ -81,6 +82,11 @@ public class UserTable : MonoBehaviour {
 		string[] s = t.text.Split (space, 2);
 
 		t.text = numOfCards.ToString () + " " + s [1];
+
+	}
+
+	public virtual void endDealt(int[][] cards){
+
 
 	}
 
