@@ -90,6 +90,15 @@ public class UserTable : MonoBehaviour {
 
 	}
 
+	public void calculateX(int length){
+
+		if (length % 2 != 0) {
+			int numOfLeftCards = length / 2;
+			this.cardX = numOfLeftCards * CARD_SPACE * -1;
+		}
+
+	}
+
 	void OnCollisionEnter2D(Collision2D c){
 		Destroy (c.gameObject);
 		addCards ();
