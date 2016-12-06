@@ -72,6 +72,23 @@ public class Mainuser : UserTable {
 		action.SetActive (_turn);
 
 	}
+
+	public void endDealt(){
+
+		action.SetActive (false);
+
+		for (int i =0;i < transform.childCount;i++) {
+			
+			GameObject child = transform.GetChild (i).gameObject;
+			if (selectedCards.Contains (child)) {
+				child.SetActive (false);
+			}
+	
+		}
+
+		selectedCards.Clear ();
+
+	}
 		
 
 	/* Deal Card button handler */
