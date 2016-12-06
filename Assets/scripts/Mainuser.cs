@@ -11,6 +11,10 @@ public class Mainuser : UserTable {
 	public float cardXMain = 87.0f;
 	public GameObject card;
 	public GameObject action;
+	public GameObject space;
+
+	private Vector2 minAnchor = new Vector2 (0.5f, 0.5f);
+	private Vector2 maxAnchor = new Vector2 (0.5f, 0.5f);
 
 	private int cardCounter = 0;
 	private List<GameObject> selectedCards;
@@ -76,20 +80,55 @@ public class Mainuser : UserTable {
 
 	}
 
-	public void endDealt(){
+	IEnumerator addCoroutine(float startX, int[][] cards){
 
-		action.SetActive (false);
+		yield return new WaitForSeconds (0.6f);
 
-		for (int i =0;i < transform.childCount;i++) {
-			
-			GameObject child = transform.GetChild (i).gameObject;
-			if (selectedCards.Contains (child)) {
-				child.SetActive (false);
-			}
-	
+		GameObject[] selectedCardsAr = selectedCards.ToArray ();
+
+		for (int i = 0; i < cards.Length; i++) {
+
+			selectedCards [i].GetComponent<Animator> ().SetBool ("dealt", true);
+			yield return new WaitForSeconds (0.5f);
+			selectedCards [i].SetActive (false);
+
+
+			GameObject j = (GameObject) Instantiate (card, new Vector3 (startX, 0, 0), Quaternion.identity);
+
+			RectTransform cardRect = j.GetComponent<RectTransform> ();
+
+			j.transform.SetParent (space.transform,true);
+			j.GetComponent<Button> ().interactable = false;
+
+
+			/* set size of the card */
+
+			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
+			cardRect.sizeDelta = new Vector2 (74.0f, containerHeight);
+
+
+			j.GetComponent<CardScript> ().setCardDetails (cards[i][0], cards[i][1]);
+			cardRect.anchorMin = minAnchor;
+			cardRect.anchorMax = maxAnchor;
+
+			cardRect.anchoredPosition3D = new Vector3 (startX, 0, 0);
+
+			startX += base.CARD_SPACE;
+
+			yield return new WaitForSeconds (0.9f);
 		}
 
 		selectedCards.Clear ();
+		yield return null;
+	}
+
+	public override void endDealt(int[][] cards){
+
+		action.SetActive (false);
+
+		base.calculateStartX (cards.Length);
+
+		StartCoroutine (addCoroutine (base.cardX, cards));
 
 	}
 		
