@@ -8,17 +8,25 @@ public class UserTable : MonoBehaviour {
 	public GameObject numOfCardsLabel;
 	public GameObject turnArrow;
 
-	private int numOfCards = 0;
 
-	/* Private variables */
+	/* Protected variables */
+
 
 	protected readonly float DISPLAYDEALTCARD_SPACE = 45.0f;
 	protected float cardX = 0;
+
+	protected readonly Vector2 minDealtCardAnchor = new Vector2 (0.5f, 0.5f);
+	protected readonly Vector2 maxDealtCardAnchor = new Vector2(0.5f,0.5f);
+
+
+	/* private variables */
+
 
 	private const float CARD_Y = 21.0f;
 	private bool turn = false;
 
 	private string _userId;
+	private int numOfCards = 0;
 	public string userId { get { return this._userId; } set { this._userId = value; } }
 
 	private bool _isOccupied = false;
@@ -86,6 +94,7 @@ public class UserTable : MonoBehaviour {
 	}
 
 	public virtual void endDealt(int[][] cards){
+
 
 
 	}
