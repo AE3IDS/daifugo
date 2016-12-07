@@ -79,7 +79,7 @@ public class Table : MonoBehaviour {
 
 	/*  a coroutine to distributes the cards */
 
-	IEnumerator initializeCoroutine(string turnId, int turnPhotoId){
+	IEnumerator initializeCoroutine(){
 
 		/* distribute the cards */
 
@@ -105,9 +105,6 @@ public class Table : MonoBehaviour {
 		}
 		card.SetActive (false);
 
-		/* assign the turn */
-
-		switchTurn (turnId);
 	}
 
 
@@ -133,10 +130,10 @@ public class Table : MonoBehaviour {
 	 * distribute and assign the correct turn
 	 */
 		
-	public void initializeTable(string turnId, int turnPhotoId){
+	public void initializeTable(){
 
 		card.SetActive (true);
-		StartCoroutine (initializeCoroutine(turnId,turnPhotoId));
+		StartCoroutine (initializeCoroutine());
 
 	}
 		
