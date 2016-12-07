@@ -6,7 +6,7 @@ using System;
 
 public class Mainuser : UserTable {
 
-	public float CARD_SPACE1 = 100.0f;
+	public float CARD_SPACE = 100.0f;
 	public float CARD_Y = 22.0f;
 	public float cardXMain = 87.0f;
 	public GameObject card;
@@ -113,7 +113,7 @@ public class Mainuser : UserTable {
 
 			cardRect.anchoredPosition3D = new Vector3 (startX, 0, 0);
 
-			startX += base.CARD_SPACE;
+			startX += base.DISPLAYDEALTCARD_SPACE;
 
 			yield return new WaitForSeconds (0.9f);
 		}
