@@ -6,20 +6,97 @@ using System;
 
 public class Mainuser : UserTable {
 
-	private float CARD_SPACE = 100.0f;
+
 	public float CARD_Y = 22.0f;
-	public float cardXMain = 87.0f;
-	public GameObject card;
+
 	public GameObject action;
 	public GameObject space;
 
-	private Vector2 minAnchor = new Vector2 (0.5f, 0.5f);
-	private Vector2 maxAnchor = new Vector2 (0.5f, 0.5f);
-
-	private int cardCounter = 0;
 	private List<GameObject> selectedCards;
 	private List<GameObject> cards;
+
 	private bool _turn = false;
+
+	private float CARD_SPACE = 100.0f;
+	private float mainCardX = 87.0f;
+
+
+
+
+	#region public methods
+
+
+	public void addCards(int suit, int rank){
+
+		GameObject j = produceCard (
+			new Vector2 (168.0f, 250.0f),
+			new Vector3 (mainCardX, CARD_Y, 0),
+			gameObject,
+			suit, rank,
+			Vector2.zero, Vector2.zero,
+			true);
+
+		cards.Add (j);
+		mainCardX += CARD_SPACE;
+
+	}
+
+
+	public void toggleTurn(){
+
+		_turn = !_turn;
+
+		foreach (GameObject g in cards) {
+			g.GetComponent<Button> ().interactable = _turn;
+		}
+
+		action.SetActive (_turn);
+
+	}
+
+
+	public override void endDealt(int[][] cards){
+
+		action.SetActive (false);
+
+		base.calculateX (cards.Length);
+
+		StartCoroutine (displayDealtCoroutine (base.cardX, cards));
+
+	}
+
+
+	/* Deal Card button handler */
+
+	public void dealCard(){
+
+		SocketConnection _socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
+		List<Dictionary<string,int>> s = new List<Dictionary<string, int>> ();
+
+
+		foreach (GameObject card in selectedCards) {
+
+			CardScript cardScript = card.GetComponent<CardScript> ();
+
+			Dictionary<string,int> cardDetails = new Dictionary<string,int> {
+				{ "suit",cardScript.cardSuit },
+				{ "kind",cardScript.cardRank }
+			};
+
+			s.Add (cardDetails);
+		}
+
+		_socket.sendSelectedCards (this.userId, s.ToArray());
+	}
+
+
+	#endregion
+
+
+
+
+	#region private methods
+
 
 	void Start(){
 
@@ -27,6 +104,7 @@ public class Mainuser : UserTable {
 		selectedCards = new List<GameObject> ();
 
 	}
+
 
 	void cardHandler(GameObject j){
 
@@ -44,78 +122,9 @@ public class Mainuser : UserTable {
 	}
 
 
-	public void addCards(int suit, int rank){
-
-		GameObject j = produceCard (
-			new Vector2 (168.0f, 250.0f),
-			new Vector3 (cardXMain, CARD_Y, 0),
-			gameObject,
-			suit, rank,
-			Vector2.zero, Vector2.zero,
-			true);
-
-		cards.Add (j);
-		cardXMain += CARD_SPACE;
-
-	}
-
-
 	void OnCollisionEnter2D(Collision2D c)
 	{
 		Destroy (c.gameObject);
-	}
-
-
-	public void toggleTurn(){
-
-		_turn = !_turn;
-
-		foreach (GameObject g in cards) {
-			g.GetComponent<Button> ().interactable = _turn;
-		}
-
-		action.SetActive (_turn);
-
-	}
-
-	IEnumerator displayDealtCoroutine(float startX, int[][] cards){
-
-		yield return new WaitForSeconds (0.6f);
-
-		GameObject[] selectedCardsAr = selectedCards.ToArray ();
-
-		for (int i = 0; i < cards.Length; i++) {
-
-			selectedCards [i].GetComponent<Animator> ().SetBool ("dealt", true);
-			yield return new WaitForSeconds (0.5f);
-			selectedCards [i].SetActive (false);
-
-			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
-
-			produceCard (
-				new Vector2 (74.0f, containerHeight), 
-				new Vector3 (startX, 0, 0), 
-				space, cards [i] [0], cards [i] [1], 
-				base.minDealtCardAnchor, base.maxDealtCardAnchor,
-				false);
-				
-			startX += base.DISPLAYDEALTCARD_SPACE;
-			yield return new WaitForSeconds (0.75f);
-		}
-
-		selectedCards.Clear ();
-		yield return null;
-	}
-
-
-	public override void endDealt(int[][] cards){
-
-		action.SetActive (false);
-
-		base.calculateX (cards.Length);
-
-		StartCoroutine (displayDealtCoroutine (base.cardX, cards));
-
 	}
 
 
@@ -142,30 +151,43 @@ public class Mainuser : UserTable {
 
 		return s.getCard ();
 	}
-		
-
-	/* Deal Card button handler */
-
-	public void dealCard(){
-
-		SocketConnection _socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
-		List<Dictionary<string,int>> s = new List<Dictionary<string, int>> ();
 
 
-		foreach (GameObject card in selectedCards) {
+	IEnumerator displayDealtCoroutine(float startX, int[][] cards){
 
-			CardScript cardScript = card.GetComponent<CardScript> ();
-		
-			Dictionary<string,int> cardDetails = new Dictionary<string,int> {
-				{ "suit",cardScript.cardSuit },
-				{ "kind",cardScript.cardRank }
-			};
+		yield return new WaitForSeconds (0.6f);
 
-			s.Add (cardDetails);
+		GameObject[] selectedCardsAr = selectedCards.ToArray ();
+
+		for (int i = 0; i < cards.Length; i++) {
+
+			selectedCards [i].GetComponent<Animator> ().SetBool ("dealt", true);
+			yield return new WaitForSeconds (0.5f);
+			selectedCards [i].SetActive (false);
+
+			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
+
+			produceCard (
+				new Vector2 (74.0f, containerHeight), 
+				new Vector3 (startX, 0, 0), 
+				space, cards [i] [0], cards [i] [1], 
+				base.minDealtCardAnchor, base.maxDealtCardAnchor,
+				false);
+
+			startX += base.DISPLAYDEALTCARD_SPACE;
+			yield return new WaitForSeconds (0.75f);
 		}
 
-		_socket.sendSelectedCards (this.userId, s.ToArray());
+		selectedCards.Clear ();
+		yield return null;
 	}
+
+
+
+
+	#endregion
+
+
 
 
 	/* testing code */
