@@ -46,17 +46,15 @@ public class Mainuser : UserTable {
 
 	public void addCards(int suit, int rank){
 
-		CardMaker card = new CardMaker ();
+		GameObject j = produceCard (
+			new Vector2 (168.0f, 250.0f),
+			new Vector3 (cardXMain, CARD_Y, 0),
+			gameObject,
+			suit, rank,
+			Vector2.zero, Vector2.zero,
+			true);
 
-		card.setCardDetails (suit, rank);
-		card.setCardInteractable (false);
-		card.getCard ().transform.SetParent (transform, true);
-		card.set3DPosition(new Vector3 (cardXMain, CARD_Y, 0));
-		card.setCardSize(new Vector2(168.0f,250.0f));
-
-		card.addHandler (delegate { cardHandler (card.getCard ()); });
-
-		cards.Add (card.getCard());
+		cards.Add (j);
 		cardXMain += CARD_SPACE;
 
 	}
@@ -98,8 +96,8 @@ public class Mainuser : UserTable {
 				new Vector2 (74.0f, containerHeight), 
 				new Vector3 (startX, 0, 0), 
 				space, cards [i] [0], cards [i] [1], 
-				base.minDealtCardAnchor, base.maxDealtCardAnchor
-			);
+				base.minDealtCardAnchor, base.maxDealtCardAnchor,
+				false);
 				
 			startX += base.DISPLAYDEALTCARD_SPACE;
 			yield return new WaitForSeconds (0.75f);
@@ -108,6 +106,7 @@ public class Mainuser : UserTable {
 		selectedCards.Clear ();
 		yield return null;
 	}
+
 
 	public override void endDealt(int[][] cards){
 
@@ -119,7 +118,8 @@ public class Mainuser : UserTable {
 
 	}
 
-	private GameObject produceCard(Vector2 size, Vector3 pos, GameObject parent, int suit, int rank, Vector2 anchorMin, Vector2 anchorMax){
+
+	private GameObject produceCard(Vector2 size, Vector3 pos, GameObject parent, int suit, int rank, Vector2 anchorMin, Vector2 anchorMax, bool addHandler){
 
 		CardMaker s = new CardMaker ();
 
@@ -129,7 +129,12 @@ public class Mainuser : UserTable {
 
 		s.getCard ().transform.SetParent (parent.transform);
 
-		if (anchorMin != null) {
+		if (addHandler) {
+			s.addHandler (delegate { cardHandler (s.getCard ()); });
+		}
+
+
+		if (!anchorMin.Equals(Vector2.zero)) {
 			s.setAnchor (anchorMin, anchorMax);
 		}
 
@@ -162,6 +167,7 @@ public class Mainuser : UserTable {
 		_socket.sendSelectedCards (this.userId, s.ToArray());
 	}
 
+
 	/* testing code */
 
 	public void init(){
@@ -171,11 +177,13 @@ public class Mainuser : UserTable {
 
 	}
 
+
 	public void addSelected(GameObject j){
 
 		selectedCards.Add (j);
 	
 	}
+
 
 	public List<GameObject> getCards(){
 
@@ -183,9 +191,11 @@ public class Mainuser : UserTable {
 
 	}
 
+
 	public List<GameObject> getSelected(){
 
 		return selectedCards;
 	}
+
 
 }
