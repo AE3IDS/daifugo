@@ -33,6 +33,14 @@ public class CardMaker{
 	}
 
 
+	public void setAnchor(Vector2 min, Vector2 max){
+
+		this.card.GetComponent<RectTransform> ().anchorMin = min;
+		this.card.GetComponent<RectTransform> ().anchorMax = max;
+
+	}
+
+
 	public void addHandler(UnityEngine.Events.UnityAction handler){
 
 		this.card.GetComponent<Button> ().onClick.AddListener (handler);
