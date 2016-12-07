@@ -84,4 +84,22 @@ public class CardMakerTest {
 	}
 
 
+	[Test]
+	public void Test_setAnchor(){
+
+		CardMaker cardM = new CardMaker ();
+
+		Vector2 min = new Vector2 (2.0f, 3.0f);
+		Vector2 max = new Vector2 (4.0f, 5.0f);
+
+		cardM.setAnchor (min, max);
+
+		GameObject j = cardM.getCard ();
+
+		Assert.IsTrue (j.GetComponent<RectTransform> ().anchorMin.Equals (min));
+		Assert.IsTrue (j.GetComponent<RectTransform> ().anchorMax.Equals (max));
+
+	}
+
+
 }
