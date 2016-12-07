@@ -129,13 +129,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 	private void startGameHandler(){
 
-		JToken turnPhotoToken = _responseData.GetValue ("turnPhotoId");
-		int turnPhotoId = turnPhotoToken.ToObject<int> ();
-
-		JToken turnIdToken = _responseData.GetValue ("turnUserId");
-		string turnId = turnIdToken.ToString ();
-
-		_tableComponent.initializeTable (turnId,turnPhotoId);
+		_tableComponent.initializeTable ();
 	}
 
 
