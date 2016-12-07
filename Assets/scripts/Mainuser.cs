@@ -6,7 +6,7 @@ using System;
 
 public class Mainuser : UserTable {
 
-	public float CARD_SPACE = 100.0f;
+	private float CARD_SPACE = 100.0f;
 	public float CARD_Y = 22.0f;
 	public float cardXMain = 87.0f;
 	public GameObject card;
@@ -80,7 +80,7 @@ public class Mainuser : UserTable {
 
 	}
 
-	IEnumerator addCoroutine(float startX, int[][] cards){
+	IEnumerator displayDealtCoroutine(float startX, int[][] cards){
 
 		yield return new WaitForSeconds (0.6f);
 
@@ -92,30 +92,17 @@ public class Mainuser : UserTable {
 			yield return new WaitForSeconds (0.5f);
 			selectedCards [i].SetActive (false);
 
-
-			GameObject j = (GameObject) Instantiate (card, new Vector3 (startX, 0, 0), Quaternion.identity);
-
-			RectTransform cardRect = j.GetComponent<RectTransform> ();
-
-			j.transform.SetParent (space.transform,true);
-			j.GetComponent<Button> ().interactable = false;
-
-
-			/* set size of the card */
-
 			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
-			cardRect.sizeDelta = new Vector2 (74.0f, containerHeight);
 
-
-			j.GetComponent<CardScript> ().setCardDetails (cards[i][0], cards[i][1]);
-			cardRect.anchorMin = minAnchor;
-			cardRect.anchorMax = maxAnchor;
-
-			cardRect.anchoredPosition3D = new Vector3 (startX, 0, 0);
-
+			produceCard (
+				new Vector2 (74.0f, containerHeight), 
+				new Vector3 (startX, 0, 0), 
+				space, cards [i] [0], cards [i] [1], 
+				base.minDealtCardAnchor, base.maxDealtCardAnchor
+			);
+				
 			startX += base.DISPLAYDEALTCARD_SPACE;
-
-			yield return new WaitForSeconds (0.9f);
+			yield return new WaitForSeconds (0.75f);
 		}
 
 		selectedCards.Clear ();
@@ -128,8 +115,27 @@ public class Mainuser : UserTable {
 
 		base.calculateX (cards.Length);
 
-		StartCoroutine (addCoroutine (base.cardX, cards));
+		StartCoroutine (displayDealtCoroutine (base.cardX, cards));
 
+	}
+
+	private GameObject produceCard(Vector2 size, Vector3 pos, GameObject parent, int suit, int rank, Vector2 anchorMin, Vector2 anchorMax){
+
+		CardMaker s = new CardMaker ();
+
+		s.setCardInteractable (false);
+		s.setCardSize (size);
+		s.setCardDetails (suit, rank);
+
+		s.getCard ().transform.SetParent (parent.transform);
+
+		if (anchorMin != null) {
+			s.setAnchor (anchorMin, anchorMax);
+		}
+
+		s.set3DPosition (pos);
+
+		return s.getCard ();
 	}
 		
 
