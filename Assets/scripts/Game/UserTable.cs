@@ -12,7 +12,7 @@ public class UserTable : MonoBehaviour {
 
 	/* Private variables */
 
-	protected float CARD_SPACE = 45.0f;
+	protected readonly float DISPLAYDEALTCARD_SPACE = 45.0f;
 	protected float cardX = 0;
 
 	private const float CARD_Y = 21.0f;
@@ -94,7 +94,7 @@ public class UserTable : MonoBehaviour {
 
 		if (length % 2 != 0) {
 			int numOfLeftCards = length / 2;
-			this.cardX = numOfLeftCards * CARD_SPACE * -1;
+			this.cardX = numOfLeftCards * DISPLAYDEALTCARD_SPACE * -1;
 		}
 
 	}
