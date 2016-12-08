@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Table : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class Table : MonoBehaviour {
 	public GameObject user;
 	public GameObject card;
 	public GameObject userDealtCardsRenderer;
+	public Transporter transporter;
 
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
@@ -104,6 +106,15 @@ public class Table : MonoBehaviour {
 			i++;
 				
 		}
+
+
+		Dictionary<string,object> data = new Dictionary<string,object>{
+			{"userId",user.GetComponent<Mainuser>().userId}
+		};
+
+		Transporter t = transporter.GetComponent<Transporter> ();
+		t.sendEndDistribute (data);
+
 		card.SetActive (false);
 
 	}
