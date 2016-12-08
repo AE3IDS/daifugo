@@ -33,7 +33,8 @@ public class Table : MonoBehaviour {
 
 	}
 
-	public void card1(int[,] m){
+
+	public void addOwnerCards(int[,] m){
 
 		cards = m;
 	}
@@ -145,6 +146,7 @@ public class Table : MonoBehaviour {
 		user.GetComponent<Mainuser> ().userId = id;
 
 	}
+
 
 	/* display dealt cards for a user */
 
