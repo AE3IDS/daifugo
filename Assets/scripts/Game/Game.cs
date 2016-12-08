@@ -51,6 +51,10 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 					gameRoomOccupiedCodeHandler ();
 					break;
 
+				case Constant.MOVE_CODE:
+					moveCodeHandler ();
+					break;
+
 				case Constant.DEALCARD_CODE:
 					dealCardHandler ();
 					break;
@@ -69,6 +73,27 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 	}
 
+
+
+	public void moveCodeHandler(){
+
+		string turnUserId = (string) _responseData.GetValue ("turn");
+		int turnPhotoId = (int)_responseData.GetValue ("photoId");
+
+		JToken prevUserIdToken = null;
+		string prevUserId = null;
+		_responseData.TryGetValue ("prevTurnId", out prevUserIdToken);
+
+		if (prevUserIdToken != null) {
+
+			prevUserId = (string)prevUserIdToken;
+			//Debug.Log ("prev" + prevUserId);
+		}
+
+
+		_tableComponent.switchTurn (turnUserId, turnPhotoId, prevUserId);
+
+	}
 
 
 	void changeRound(string roundInt){
