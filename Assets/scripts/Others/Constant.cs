@@ -16,6 +16,8 @@ public static class Constant{
 	public const int STARTGAME_CODE = 111;
 	public const int DEALCARD_CODE = 112;
 
+
+	public const int ENDDISTRIBUTE = 49;
 	public const int GAMEROOM_OCCUPIED = 50;
 
 }
