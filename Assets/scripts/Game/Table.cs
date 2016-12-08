@@ -44,7 +44,7 @@ public class Table : MonoBehaviour {
 
 	/*   Switch the players turn   */
 
-	private void switchTurn(string id, int photoId, string prevId){
+	public void switchTurn(string id, int photoId, string prevId){
 
 		UserTable nextPlayer = null;
 		UserTable prevPlayer = null;
