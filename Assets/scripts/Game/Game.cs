@@ -85,6 +85,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		_tableComponent.addUser (userId, photoId);
 	}
 
+
 	private void dealCardHandler(){
 
 		string userId = (string)_responseData.GetValue ("userId");
@@ -122,7 +123,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 			cards [i, 1] = j.GetValue ("_kind").ToObject<int> ();
 		}
 
-		_tableComponent.card1 (cards);
+		_tableComponent.addOwnerCards (cards);
 		_socket.sendReady (userId);	
 	}
 
