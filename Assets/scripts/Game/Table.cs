@@ -44,37 +44,52 @@ public class Table : MonoBehaviour {
 
 	/*   Switch the players turn   */
 
-	private void switchTurn(string id){
+	private void switchTurn(string id, int photoId, string prevId){
 
+		UserTable nextPlayer = null;
+		UserTable prevPlayer = null;
 
-		/* Toggle the turn of the last player */
+		foreach (GameObject user1 in otherPlayers) {
 
-		if (prevTurn != null) {
-			prevTurn.toggleTurn ();
-		}
+			UserTable userTable = user1.GetComponent<UserTable> ();
 
+			if (userTable.userId.Equals(prevId)) {
 
-		/* Find the player for next turn based on id */
+				prevPlayer = userTable;
 
-		bool found = false;
-
-		for (int i = 0; i < otherPlayers.Length; i++) {
-			UserTable t = otherPlayers [i].GetComponent<UserTable> ();
-			if (t.userId == id) {
-				t.toggleTurn ();
-				prevTurn = t;
-				found = true;
-				break;
 			}
+
+
+			if (userTable.userId.Equals(id)) {
+
+				nextPlayer = userTable;
+
+			}
+
 		}
 
-		/* found == false, main players turn */ 
 
-		if (!found) {
+		if ((prevId == null && nextPlayer == null) || prevPlayer == null) {
+
 			user.GetComponent<Mainuser> ().toggleTurn ();
-			prevTurn = user.GetComponent<Mainuser> ();
 
 		}
+
+
+		if (prevId != null && prevPlayer != null) {
+
+			prevPlayer.toggleTurn ();
+
+		}
+
+
+
+		if (nextPlayer != null) {
+
+			nextPlayer.toggleTurn ();
+
+		}
+	
 			
 	}
 
