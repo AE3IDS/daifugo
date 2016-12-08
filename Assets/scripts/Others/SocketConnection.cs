@@ -99,13 +99,6 @@ public class SocketConnection : MonoBehaviour{
 	}
 
 
-	public void sendReady(Dictionary<string,object> dt){
-
-		requestPool.Add (JSONMaker.makeJSON(Constant.READY_CODE,dt));
-
-	}
-
-
 	public void sendLobbyDetails(Dictionary<string,object> dt){
 
 		requestPool.Add (JSONMaker.makeJSON (Constant.LOBBYDETAILS_CODE,dt));
@@ -113,17 +106,11 @@ public class SocketConnection : MonoBehaviour{
 	}
 
 
-	public void sendRequestForCards(Dictionary<string,object> dt){
-		
-		requestPool.Add (JSONMaker.makeJSON(Constant.CARD_CODE,dt));
+	public void sendJSON(int code, Dictionary<string,object> dt){
+
+		requestPool.Add (JSONMaker.makeJSON (code,dt));
 
 	}
 
-
-	public void sendGreetMessage(Dictionary<string,object> dt){
-		
-		requestPool.Add (JSONMaker.makeJSON(Constant.GREET_CODE,dt));
-
-	}
 
 }
