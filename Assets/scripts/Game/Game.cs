@@ -12,10 +12,10 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 	// public variables
 
-	public GameObject gameTable, Overlay, round;
-
+	public GameObject gameTable, Overlay, round, transporter;
 
 	private Table _tableComponent;
+	private Transporter _transport;
 	private Text _roundTextComponent;
 	private OverlayScript _overlayscriptComponent;
 	private bool _hasReceivedData = false;
@@ -72,8 +72,10 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 
 
 	void changeRound(string roundInt){
+
 		string[] g = _roundTextComponent.text.Split (' ');
 		_roundTextComponent.text = g [0] + " " + roundInt;
+
 	}
 
 
@@ -108,7 +110,8 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		
 		_overlayscriptComponent.toggle ();
 		_overlayscriptComponent.toggleWaitingText ();
-		_socket.sendRequestForCards (userId);
+		_transport.sendRequestCards (userId);
+
 	}
 
 
@@ -124,7 +127,7 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		}
 
 		_tableComponent.addOwnerCards (cards);
-		_socket.sendReady (userId);	
+		_transport.sendReady (userId);
 	}
 
 
@@ -178,12 +181,9 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		};
 
 
-		/* find socket from prev scene and send greet message */
-
-		_socket = (GameObject.FindWithTag ("socket")).GetComponent<SocketConnection> ();
-		_socket.setDelegate (this);
-
-		_socket.sendGreetMessage (userId);
+		_transport = transporter.GetComponent<Transporter> ();
+		_transport.setSocketDelegate (this);
+		_transport.sendGreet (userId);
 
 
 		/* set user Id */
@@ -197,10 +197,6 @@ public class Game : MonoBehaviour,SocketConnectionInterface {
 		_overlayscriptComponent.toggleLoadingText ();
 	}
 
-	void Update () {
-
-
-	}
 
 	void Awake(){
 
