@@ -20,7 +20,7 @@ public class Mainuser : UserTable {
 	private float CARD_SPACE = 100.0f;
 	private float mainCardX = 87.0f;
 
-
+	public GameObject transporter;
 
 
 	#region public methods
@@ -157,7 +157,6 @@ public class Mainuser : UserTable {
 
 		yield return new WaitForSeconds (0.6f);
 
-		GameObject[] selectedCardsAr = selectedCards.ToArray ();
 
 		for (int i = 0; i < cards.Length; i++) {
 
@@ -179,6 +178,16 @@ public class Mainuser : UserTable {
 		}
 
 		selectedCards.Clear ();
+
+
+		Dictionary<string,object> data = new Dictionary<string,object>{
+			{"userId",this.userId}
+		};
+
+		Transporter t = transporter.GetComponent<Transporter> ();
+		t.sendEndDistribute (data);
+
+
 		yield return null;
 	}
 
