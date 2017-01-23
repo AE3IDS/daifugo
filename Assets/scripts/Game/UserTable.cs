@@ -14,6 +14,7 @@ public class UserTable : MonoBehaviour {
 
 	protected readonly float DISPLAYDEALTCARD_SPACE = 45.0f;
 	protected float cardX = 0;
+	protected readonly float CARDSPACE = 74.0f;
 
 	protected readonly Vector2 minDealtCardAnchor = new Vector2 (0.5f, 0.5f);
 	protected readonly Vector2 maxDealtCardAnchor = new Vector2(0.5f,0.5f);
@@ -101,9 +102,18 @@ public class UserTable : MonoBehaviour {
 
 	public void calculateX(int length){
 
+		int numOfLeftSideCards = length / 2;
+
 		if (length % 2 != 0) {
-			int numOfLeftCards = length / 2;
-			this.cardX = numOfLeftCards * DISPLAYDEALTCARD_SPACE * -1;
+			
+			this.cardX = numOfLeftSideCards * DISPLAYDEALTCARD_SPACE * -1;
+
+		} else {
+
+			float m = ((CARDSPACE / 2) / 2);
+			float h = (numOfLeftSideCards - 1) * DISPLAYDEALTCARD_SPACE;
+			this.cardX = (h + m) * -1;
+
 		}
 
 	}
