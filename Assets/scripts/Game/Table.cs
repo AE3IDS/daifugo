@@ -11,6 +11,7 @@ public class Table : MonoBehaviour {
 	public GameObject card;
 	public GameObject userDealtCardsRenderer;
 	public Transporter transporter;
+	public GameObject turnView;
 
 	string[] cardStates = new string[] {"distributeUp","distributeRight","distributeDown","distributeLeft"};
 	private GameObject[] otherPlayers = new GameObject[3];
@@ -49,44 +50,41 @@ public class Table : MonoBehaviour {
 		UserTable nextPlayer = null;
 		UserTable prevPlayer = null;
 
+
 		foreach (GameObject user1 in otherPlayers) {
 
 			UserTable userTable = user1.GetComponent<UserTable> ();
 
 			if (userTable.userId.Equals(prevId)) {
-
 				prevPlayer = userTable;
-
 			}
 
 
 			if (userTable.userId.Equals(id)) {
-
 				nextPlayer = userTable;
-
 			}
 
 		}
 
 
 		if ((prevId == null && nextPlayer == null) || prevPlayer == null) {
-
 			user.GetComponent<Mainuser> ().toggleTurn ();
-
 		}
 
 
 		if (prevId != null && prevPlayer != null) {
-
 			prevPlayer.toggleTurn ();
-
 		}
-
-
+			
 
 		if (nextPlayer != null) {
 
 			nextPlayer.toggleTurn ();
+
+			if (nextPlayer.getTurn ()) {
+				turnView.GetComponent<TurnView> ().setAvaTurnImage (photoId);
+				turnView.SetActive (true);
+			}
 
 		}
 	
