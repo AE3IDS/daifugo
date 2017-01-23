@@ -167,7 +167,7 @@ public class Mainuser : UserTable {
 			float containerHeight = space.GetComponent<RectTransform> ().sizeDelta.y;
 
 			produceCard (
-				new Vector2 (74.0f, containerHeight), 
+				new Vector2 (base.CARDSPACE, containerHeight), 
 				new Vector3 (startX, 0, 0), 
 				space, cards [i] [0], cards [i] [1], 
 				base.minDealtCardAnchor, base.maxDealtCardAnchor,
