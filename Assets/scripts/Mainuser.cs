@@ -15,7 +15,7 @@ public class Mainuser : UserTable {
 	private List<GameObject> selectedCards;
 	private List<GameObject> cards;
 
-	private bool _turn = false;
+//	private bool _turn = false;
 
 	private float CARD_SPACE = 100.0f;
 	private float mainCardX = 87.0f;
@@ -44,13 +44,13 @@ public class Mainuser : UserTable {
 
 	public void toggleTurn(){
 
-		_turn = !_turn;
+		this._turn = !this._turn;
 
 		foreach (GameObject g in cards) {
-			g.GetComponent<Button> ().interactable = _turn;
+			g.GetComponent<Button> ().interactable = this._turn;
 		}
 
-		action.SetActive (_turn);
+		action.SetActive (this._turn);
 
 	}
 
