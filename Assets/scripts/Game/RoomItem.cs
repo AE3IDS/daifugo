@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 
 public class RoomItem : MonoBehaviour {
@@ -36,6 +37,16 @@ public class RoomItem : MonoBehaviour {
 		txtName.text = txtName.text + name;
 
 
+	}
+
+
+	public string getRoomId()
+	{
+		char[] splitChar = {' '};
+		string str = this.roomName.GetComponent<Text>().text;
+		string[] strs = str.Split(splitChar);
+		
+		return strs[1];
 	}
 
 
