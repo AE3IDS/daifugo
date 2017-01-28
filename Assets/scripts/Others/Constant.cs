@@ -9,7 +9,7 @@ public static class Constant{
 	public const int ROOMLIST_CODE = 104;
 	public const int FETCHRULE_CODE = 105;
 	public const int LOBBYDETAILS_CODE = 106;
-	public const int TURN_CODE = 107;
+	public const int JOINGAME_CODE = 107;
 	public const int CARD_CODE = 108;
 	public const int REQUESTCARD_CODE = 109;
 	public const int READY_CODE = 110;
