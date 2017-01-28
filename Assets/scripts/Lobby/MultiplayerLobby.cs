@@ -1,11 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+
 public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
+
+	public GameObject transporter;
+
+
+	private JToken _responseTk;
+	private int _responseCd;
 
 	// Use this for initialization
 	void Start () {
 	
+		/* Get list of rooms */
+		Transporter t = transporter.GetComponent<Transporter> ();
+		t.setSocketDelegate (this);
+		t.requestRooms ();
+
 	}
 	
 	public void receiveData(string dt)
