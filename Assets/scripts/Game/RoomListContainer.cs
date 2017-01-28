@@ -43,7 +43,7 @@ public class RoomListContainer : MonoBehaviour {
 
 	public string getSelectedRoomToJoin()
 	{
-		return this.selectedRoom.GetComponent<RoomItem>().roomName;
+		return this.selectedRoom.GetComponent<RoomItem>().getRoomId();
 	}
 
 }
