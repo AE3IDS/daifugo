@@ -21,6 +21,8 @@ public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
 		t.setSocketDelegate (this);
 		t.requestRooms ();
 
+		StartCoroutine (addRooms ());
+
 	}
 	
 	public void receiveData(string dt)
