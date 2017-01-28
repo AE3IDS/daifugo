@@ -37,6 +37,46 @@ public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
 
 	}
 
+	IEnumerator rcvDtCoroutine()
+	{	
+		while (true) 
+		{
+			while (_responseTk == null) 
+				yield return null;
+
+
+			switch (_responseCd) 
+			{
+
+				case Constant.LOBBYDETAILS_CODE:
+				
+					JObject responseObject = (JObject)_responseTk;
+					string _tempId = (string)responseObject.GetValue("userId");
+					PlayerPrefs.SetString ("user", _tempId);
+					Debug.Log(_tempId);
+					//SceneManager.LoadScene ("game");
+
+				break;
+
+				case Constant.ROOMLIST_CODE:
+
+					JArray rms = (JArray)_responseTk;
+					RoomListContainer r = roomContainer.GetComponent<RoomListContainer> ();
+
+					foreach (JToken s in rms) 
+					{
+						Dictionary<string,string> rmData = s.ToObject<Dictionary<string,string>> ();
+						r.addRooms (rmData);
+					}
+
+				break;
+
+			}
+	
+			_responseTk = null;
+		}
+	}
+
 
 	// Update is called once per frame
 	void Update () {
