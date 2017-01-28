@@ -41,4 +41,10 @@ public class avatars : MonoBehaviour {
 		activeChoice = b;
 	}
 
+	public int getAvatarSelection()
+	{
+		return this._selectedIndex;
+	}
+
+
 }
