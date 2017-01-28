@@ -54,6 +54,10 @@ public class Transporter : MonoBehaviour{
 	}
 
 
+	public void sendJoinRequest(Dictionary<string, object> data)
+	{
+		_socket.sendJSON (Constant.JOINGAME_CODE, data);
+	}
 
 
 
