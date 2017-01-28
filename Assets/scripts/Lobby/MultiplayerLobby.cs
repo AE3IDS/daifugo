@@ -37,6 +37,28 @@ public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
 
 	}
 
+
+	public void joinButtonHandler()
+	{
+
+		// Show Loading
+
+		// Send Join request to server
+
+		RoomListContainer rlc = roomContainer.GetComponent<RoomListContainer> ();
+		avatars avc = avatarContainer.GetComponent<avatars> ();					
+
+		Dictionary<string,object> d = new Dictionary<string,object> () {
+			{"roomId", rlc.getSelectedRoomToJoin()},
+			{ "avatarId", avc.getAvatarSelection()}
+		};
+
+		Transporter t = transporter.GetComponent<Transporter> ();
+		t.sendJoinRequest (d);
+
+	}
+
+
 	IEnumerator rcvDtCoroutine()
 	{	
 		while (true) 
