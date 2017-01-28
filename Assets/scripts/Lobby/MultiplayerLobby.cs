@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
 
 	public GameObject transporter;
-
+	public GameObject roomContainer;
+	public GameObject avatarContainer;
 
 	private JToken _responseTk;
 	private int _responseCd;
@@ -75,7 +76,7 @@ public class MultiplayerLobby : MonoBehaviour,SocketConnectionInterface {
 					JObject responseObject = (JObject)_responseTk;
 					string _tempId = (string)responseObject.GetValue("userId");
 					PlayerPrefs.SetString ("user", _tempId);
-					Debug.Log(_tempId);
+					// Debug.Log(_tempId);
 					//SceneManager.LoadScene ("game");
 
 				break;
