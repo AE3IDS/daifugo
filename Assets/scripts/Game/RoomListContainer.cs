@@ -5,6 +5,21 @@ using System.Collections.Generic;
 public class RoomListContainer : MonoBehaviour {
 
 
+	private GameObject selectedRoom = null;
+
+
+	public void toggleHandler(GameObject s)
+	{
+
+		if(this.selectedRoom != null)
+		{
+			this.selectedRoom.GetComponent<RoomItem> ().disableCheck ();
+		}
+
+		this.selectedRoom = s;
+	}
+
+
 	public void addRooms(Dictionary<string,string> roomDetails)
 	{
 
@@ -20,6 +35,9 @@ public class RoomListContainer : MonoBehaviour {
 		roomDetails.TryGetValue ("rules", out rules);
 
 		newRoom.GetComponent<RoomItem> ().setItemDetails (rules, roomName, numOfPlayer);
+		newRoom.GetComponent<RoomItem> ().setToggleUIHandler (delegate{
+			this.toggleHandler (newRoom);
+		});
 
 	}
 
