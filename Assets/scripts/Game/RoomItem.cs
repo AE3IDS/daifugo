@@ -8,6 +8,7 @@ public class RoomItem : MonoBehaviour {
 	public GameObject roomName;
 	public GameObject rules;
 	public GameObject numOfPlayers;
+	public GameObject checkMark;
 
 
 	public void setItemDetails(string rulesStr, string name, string num){
@@ -38,10 +39,17 @@ public class RoomItem : MonoBehaviour {
 	}
 
 
-	public void joinButtonHandler(){
+	public void setToggleUIHandler(UnityEngine.Events.UnityAction<bool> handler)
+	{
+
+		this.checkMark.GetComponent<Toggle> ().onValueChanged.AddListener (handler);
+
+	}
 
 
-
+	public void disableCheck()
+	{	
+		this.checkMark.GetComponent<Toggle> ().isOn = false;
 	}
 
 
