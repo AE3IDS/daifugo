@@ -48,6 +48,11 @@ public class Transporter : MonoBehaviour{
 
 	}
 
+	public void requestRooms()
+	{
+		_socket.sendJSON (Constant.ROOMLIST_CODE, new Dictionary<string,object> (){ });
+	}
+
 
 
 
